@@ -1,6 +1,3 @@
-// ── Navigation ─────────────────────────────────────────
-export const NAV_LINKS = ["Protocol", "Developers", "Assets", "Docs"] as const;
-
 // ── Footer ─────────────────────────────────────────────
 export const FOOTER_LINKS = ["Docs", "GitHub", "Twitter / X"] as const;
 
@@ -22,3 +19,10 @@ export const ECOSYSTEM_ASSETS: AssetData[] = [
     { ticker: "PAXG", name: "Pax Gold", bg: "#D4AF37" },
     { ticker: "USTB", name: "US Treasuries", bg: "#333" },
 ];
+
+// ── Features: Multi-Asset Token Badges ─────────────────
+export const TOKEN_BADGES = [
+    { label: "T", color: "#28A0F0" },
+    { label: "G", color: "#D4AF37" },
+    { label: "C", color: "#26A17B" },
+] as const;
