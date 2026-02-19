@@ -1,11 +1,84 @@
 "use client";
 
+import { useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 import { fadeUp, stagger } from "@/lib/animations";
 import PillButton from "@/components/ui/PillButton";
-import Navbar from "@/components/sections/Navbar";
 import { HERO_VIDEO_URL } from "@/data/constants";
 
+// ── Floating Particles Canvas ──────────────────────────────
+function Particles() {
+    const canvasRef = useRef<HTMLCanvasElement>(null);
+
+    useEffect(() => {
+        const canvas = canvasRef.current;
+        if (!canvas) return;
+        const ctx = canvas.getContext("2d");
+        if (!ctx) return;
+
+        let animationId: number;
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+        const resize = () => {
+            canvas.width = canvas.offsetWidth * dpr;
+            canvas.height = canvas.offsetHeight * dpr;
+            ctx.scale(dpr, dpr);
+        };
+        resize();
+        window.addEventListener("resize", resize);
+
+        // Create particles
+        const COUNT = 40;
+        const particles = Array.from({ length: COUNT }, () => ({
+            x: Math.random() * canvas.offsetWidth,
+            y: Math.random() * canvas.offsetHeight,
+            r: Math.random() * 1.5 + 0.5,
+            vx: (Math.random() - 0.5) * 0.3,
+            vy: (Math.random() - 0.5) * 0.3 - 0.15,
+            opacity: Math.random() * 0.4 + 0.1,
+        }));
+
+        const animate = () => {
+            const w = canvas.offsetWidth;
+            const h = canvas.offsetHeight;
+            ctx.clearRect(0, 0, w, h);
+
+            for (const p of particles) {
+                p.x += p.vx;
+                p.y += p.vy;
+
+                // Wrap around
+                if (p.x < 0) p.x = w;
+                if (p.x > w) p.x = 0;
+                if (p.y < 0) p.y = h;
+                if (p.y > h) p.y = 0;
+
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(255, 255, 255, ${p.opacity})`;
+                ctx.fill();
+            }
+
+            animationId = requestAnimationFrame(animate);
+        };
+        animate();
+
+        return () => {
+            cancelAnimationFrame(animationId);
+            window.removeEventListener("resize", resize);
+        };
+    }, []);
+
+    return (
+        <canvas
+            ref={canvasRef}
+            className="absolute inset-0 w-full h-full pointer-events-none z-[1]"
+            aria-hidden="true"
+        />
+    );
+}
+
+// ── Hero Section ───────────────────────────────────────────
 export default function Hero() {
     return (
         <section className="relative min-h-screen bg-black overflow-hidden">
@@ -20,9 +93,12 @@ export default function Hero() {
                 <source src={HERO_VIDEO_URL} type="video/mp4" />
             </video>
 
+            {/* Floating particles overlay */}
+            <Particles />
+
             {/* Cinematic Vignette */}
             <div
-                className="absolute inset-0 pointer-events-none z-0"
+                className="absolute inset-0 pointer-events-none z-[2]"
                 style={{
                     background: "radial-gradient(circle at center, transparent 0%, #0A0A0B 95%)",
                 }}
@@ -37,9 +113,6 @@ export default function Hero() {
                 }}
                 aria-hidden="true"
             />
-
-            {/* Navbar */}
-            <Navbar />
 
             {/* Hero Content */}
             <motion.div
@@ -63,16 +136,12 @@ export default function Hero() {
                     <span className="text-white">Q3 2026</span>
                 </motion.div>
 
-                {/* Heading */}
+                {/* Heading — animated gradient */}
                 <motion.h1
                     variants={fadeUp}
-                    className="font-body font-bold tracking-tight leading-[1.1] max-w-[800px] mb-4"
+                    className="zenith-gradient font-body font-bold tracking-tight leading-[1.1] max-w-[800px] mb-4"
                     style={{
                         fontSize: "clamp(2.5rem, 5vw, 4rem)",
-                        backgroundImage: "linear-gradient(180deg, #ffffff 0%, rgba(255,255,255,0.7) 100%)",
-                        WebkitBackgroundClip: "text",
-                        WebkitTextFillColor: "transparent",
-                        backgroundClip: "text",
                     }}
                 >
                     Institutional Yield for<br />Real-World Assets
@@ -102,9 +171,9 @@ export default function Hero() {
             />
 
             {/* Scroll hint */}
-            <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-25 pointer-events-none z-20">
-                <span className="font-code text-[9px] tracking-[0.4em] text-white/50 uppercase">Scroll</span>
-                <div className="w-px h-10 bg-gradient-to-b from-white/40 to-transparent" />
+            <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-60 pointer-events-none z-30">
+                <span className="font-code text-[9px] tracking-[0.4em] text-white/70 uppercase">Scroll</span>
+                <div className="w-px h-10 bg-gradient-to-b from-white/50 to-transparent" />
             </div>
         </section>
     );

@@ -55,17 +55,15 @@ body::after {
 .zenith-gradient {
   background: linear-gradient(108deg,
       #ffffff 0%,
-      #ffffff 22%,
-      #9ed4f8 42%,
-      #ffffff 58%,
-      #ffffff 78%,
-      #fff3b0 92%,
+      #9ed4f8 25%,
+      #ffffff 50%,
+      #fff3b0 75%,
       #ffffff 100%);
-  background-size: 240% auto;
+  background-size: 200% auto;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  animation: zenith-shimmer 7s linear infinite;
+  animation: zenith-shimmer 6s ease-in-out infinite alternate;
 }
 
 @keyframes zenith-shimmer {
@@ -74,7 +72,7 @@ body::after {
   }
 
   to {
-    background-position: 240% center;
+    background-position: 100% center;
   }
 }
 
