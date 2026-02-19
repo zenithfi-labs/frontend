@@ -2,147 +2,169 @@
 
 import { useRef, useMemo } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { MeshDistortMaterial, Float } from "@react-three/drei";
+import { Float } from "@react-three/drei";
 import * as THREE from "three";
 
-// ── Soft circular sprite texture (makes particles round) ──
-function useCircleTexture() {
-  return useMemo(() => {
-    const size = 64;
-    const canvas = document.createElement("canvas");
-    canvas.width = size;
-    canvas.height = size;
-    const ctx = canvas.getContext("2d")!;
-    const gradient = ctx.createRadialGradient(
-      size / 2, size / 2, 0,
-      size / 2, size / 2, size / 2
-    );
-    gradient.addColorStop(0, "rgba(255,255,255,1)");
-    gradient.addColorStop(0.35, "rgba(255,255,255,0.7)");
-    gradient.addColorStop(1, "rgba(255,255,255,0)");
-    ctx.fillStyle = gradient;
-    ctx.fillRect(0, 0, size, size);
-    return new THREE.CanvasTexture(canvas);
-  }, []);
+// ── Satellite orbital configs ──────────────────────────────
+// Each satellite = one yield protocol orbiting the Zenith hub
+interface SatConfig {
+  radius: number;
+  tiltX: number; // how much Y-axis varies (gives 3D tilt to orbit)
+  speed: number;
+  phase: number;
+  color: string;
+  size: number;
 }
 
-// ── Central orb — 3 layers for visible depth ──────────────
-function Orb() {
+const SAT_CONFIGS: SatConfig[] = [
+  { radius: 2.4,  tiltX:  0.55, speed:  0.20, phase: 0.00, color: "#28A0F0", size: 0.13 },
+  { radius: 2.2,  tiltX: -0.40, speed: -0.15, phase: 1.26, color: "#FFD60A", size: 0.10 },
+  { radius: 2.5,  tiltX:  0.75, speed:  0.12, phase: 2.51, color: "#28A0F0", size: 0.12 },
+  { radius: 2.3,  tiltX: -0.65, speed: -0.22, phase: 3.77, color: "#FFD60A", size: 0.09 },
+  { radius: 2.45, tiltX:  0.30, speed:  0.17, phase: 5.03, color: "#28A0F0", size: 0.11 },
+];
+
+const N_FLOW = 5; // flow particles per connection line
+
+// ── Central Zenith hub ─────────────────────────────────────
+function Hub() {
   const groupRef = useRef<THREE.Group>(null);
 
   useFrame(({ clock }) => {
     if (!groupRef.current) return;
-    groupRef.current.rotation.y = clock.elapsedTime * 0.09;
-    groupRef.current.rotation.x = Math.sin(clock.elapsedTime * 0.28) * 0.06;
+    groupRef.current.rotation.y = clock.elapsedTime * 0.12;
+    groupRef.current.rotation.x = Math.sin(clock.elapsedTime * 0.3) * 0.05;
   });
 
   return (
-    <Float speed={1.4} rotationIntensity={0.12} floatIntensity={0.45}>
+    <Float speed={1.2} rotationIntensity={0.08} floatIntensity={0.3}>
       <group ref={groupRef}>
-        {/* Inner fill — gives the sphere volume so it reads as 3D, not hollow */}
+        {/* Dark fill — gives the hub visible volume */}
         <mesh>
-          <icosahedronGeometry args={[1.35, 2]} />
-          <meshBasicMaterial color="#050f22" transparent opacity={0.55} />
+          <icosahedronGeometry args={[1.0, 2]} />
+          <meshBasicMaterial color="#040d1e" transparent opacity={0.88} />
         </mesh>
-
-        {/* Wireframe overlay — reduced opacity for more ethereal look */}
-        <mesh scale={1.008}>
-          <icosahedronGeometry args={[1.35, 2]} />
-          <meshBasicMaterial
-            color="#28A0F0"
-            wireframe
-            transparent
-            opacity={0.35}
-          />
+        {/* Primary wireframe */}
+        <mesh scale={1.01}>
+          <icosahedronGeometry args={[1.0, 2]} />
+          <meshBasicMaterial color="#28A0F0" wireframe transparent opacity={0.45} />
+        </mesh>
+        {/* Outer halo — low-detail, very faint */}
+        <mesh scale={1.22}>
+          <icosahedronGeometry args={[1.0, 1]} />
+          <meshBasicMaterial color="#28A0F0" wireframe transparent opacity={0.09} />
         </mesh>
       </group>
     </Float>
   );
 }
 
-// ── Orbiting ring ──────────────────────────────────────────
-interface RingProps {
-  radius: number;
-  tube: number;
-  color: string;
-  rx: number;
-  ry: number;
-  rz: number;
-  speed: number;
-  opacity: number;
-}
+// ── Satellite nodes + connection lines + flow particles ────
+function NodeGraph() {
+  // Build all Three.js objects once — updated imperatively each frame
+  const objects = useMemo(() => {
+    return SAT_CONFIGS.map((cfg) => {
+      // Satellite sphere
+      const satMesh = new THREE.Mesh(
+        new THREE.SphereGeometry(cfg.size, 12, 12),
+        new THREE.MeshBasicMaterial({
+          color: cfg.color,
+          transparent: true,
+          opacity: 0.95,
+        })
+      );
 
-function Ring({ radius, tube, color, rx, ry, rz, speed, opacity }: RingProps) {
-  const mesh = useRef<THREE.Mesh>(null);
+      // Wireframe halo around satellite
+      const haloMesh = new THREE.Mesh(
+        new THREE.SphereGeometry(cfg.size * 2.0, 6, 6),
+        new THREE.MeshBasicMaterial({
+          color: cfg.color,
+          wireframe: true,
+          transparent: true,
+          opacity: 0.12,
+        })
+      );
+
+      // Connection line: hub (origin) → satellite
+      const lineGeo = new THREE.BufferGeometry();
+      lineGeo.setAttribute(
+        "position",
+        new THREE.BufferAttribute(new Float32Array(6), 3)
+      );
+      const line = new THREE.Line(
+        lineGeo,
+        new THREE.LineBasicMaterial({
+          color: cfg.color,
+          transparent: true,
+          opacity: 0.18,
+        })
+      );
+      line.frustumCulled = false;
+
+      // Flow particles traveling from hub → satellite
+      const flowGeo = new THREE.BufferGeometry();
+      flowGeo.setAttribute(
+        "position",
+        new THREE.BufferAttribute(new Float32Array(N_FLOW * 3), 3)
+      );
+      const flow = new THREE.Points(
+        flowGeo,
+        new THREE.PointsMaterial({
+          size: 0.06,
+          color: cfg.color,
+          transparent: true,
+          opacity: 0.85,
+          sizeAttenuation: true,
+        })
+      );
+      flow.frustumCulled = false;
+
+      return { satMesh, haloMesh, line, lineGeo, flow, flowGeo, cfg };
+    });
+  }, []);
 
   useFrame(({ clock }) => {
-    if (!mesh.current) return;
-    mesh.current.rotation.z = clock.elapsedTime * speed;
+    const t = clock.elapsedTime;
+
+    objects.forEach(({ satMesh, haloMesh, lineGeo, flowGeo, cfg }) => {
+      // Compute satellite world position on its tilted orbit
+      const angle = cfg.phase + t * cfg.speed;
+      const x = Math.cos(angle) * cfg.radius;
+      const y = Math.sin(angle) * cfg.radius * cfg.tiltX;
+      const z = Math.sin(angle * 0.6 + cfg.phase) * 0.35; // subtle Z depth
+
+      satMesh.position.set(x, y, z);
+      haloMesh.position.set(x, y, z);
+
+      // Update line: origin → satellite
+      const lp = lineGeo.attributes.position as THREE.BufferAttribute;
+      lp.setXYZ(0, 0, 0, 0);
+      lp.setXYZ(1, x, y, z);
+      lp.needsUpdate = true;
+      lineGeo.computeBoundingSphere();
+
+      // Update flow particles (each travels from hub to satellite at staggered phases)
+      const fp = flowGeo.attributes.position as THREE.BufferAttribute;
+      for (let j = 0; j < N_FLOW; j++) {
+        const tFlow = (t * 0.45 + j / N_FLOW) % 1;
+        fp.setXYZ(j, x * tFlow, y * tFlow, z * tFlow);
+      }
+      fp.needsUpdate = true;
+      flowGeo.computeBoundingSphere();
+    });
   });
 
   return (
-    <mesh ref={mesh} rotation={[rx, ry, rz]}>
-      <torusGeometry args={[radius, tube, 20, 120]} />
-      <meshBasicMaterial color={color} transparent opacity={opacity} />
-    </mesh>
-  );
-}
-
-// ── Circular particle cloud ────────────────────────────────
-interface ParticlesProps {
-  count?: number;
-  color?: string;
-  speed?: number;
-  size?: number;
-  radiusMin?: number;
-  radiusMax?: number;
-}
-
-function Particles({
-  count = 120,
-  color = "#28A0F0",
-  speed = 0.035,
-  size = 0.08,
-  radiusMin = 2.3,
-  radiusMax = 4.5,
-}: ParticlesProps) {
-  const points = useRef<THREE.Points>(null);
-  const texture = useCircleTexture();
-
-  const geometry = useMemo(() => {
-    const positions = new Float32Array(count * 3);
-    for (let i = 0; i < count; i++) {
-      const r = radiusMin + Math.random() * (radiusMax - radiusMin);
-      const theta = Math.random() * Math.PI * 2;
-      const phi = Math.acos(2 * Math.random() - 1);
-      positions[i * 3] = r * Math.sin(phi) * Math.cos(theta);
-      positions[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
-      positions[i * 3 + 2] = r * Math.cos(phi);
-    }
-    const geo = new THREE.BufferGeometry();
-    geo.setAttribute("position", new THREE.BufferAttribute(positions, 3));
-    return geo;
-  }, [count, radiusMin, radiusMax]);
-
-  useFrame(({ clock }) => {
-    if (!points.current) return;
-    points.current.rotation.y = clock.elapsedTime * speed;
-    points.current.rotation.x = Math.sin(clock.elapsedTime * 0.014) * 0.07;
-  });
-
-  return (
-    <points ref={points} geometry={geometry}>
-      <pointsMaterial
-        size={size}
-        color={color}
-        transparent
-        opacity={0.85}
-        sizeAttenuation
-        depthWrite={false}
-        alphaMap={texture}
-        alphaTest={0.01}
-      />
-    </points>
+    <group>
+      {objects.map((o, i) => (
+        <group key={i}>
+          <primitive object={o.satMesh} />
+          <primitive object={o.haloMesh} />
+          <primitive object={o.line} />
+          <primitive object={o.flow} />
+        </group>
+      ))}
+    </group>
   );
 }
 
@@ -154,49 +176,13 @@ export default function HeroScene() {
       gl={{ antialias: true, alpha: true }}
       dpr={[1, 2]}
     >
-      {/* Lighting — strong key light creates clear bright/dark gradient */}
-      <ambientLight intensity={0.08} />
-      {/* Key light — upper right, main illumination */}
-      <pointLight position={[5, 5, 4]} color="#6acfff" intensity={6} />
-      {/* Fill light — opposite side, cooler + dimmer */}
-      <pointLight position={[-4, -2, 2]} color="#28A0F0" intensity={1.5} />
-      {/* Gold rim light — lower left for warm accent edge */}
-      <pointLight position={[-2, -4, -2]} color="#FFD60A" intensity={2.5} />
-      {/* Back glow — creates silhouette depth */}
-      <pointLight position={[0, 0, -4]} color="#1a3a70" intensity={4} />
+      <ambientLight intensity={0.06} />
+      <pointLight position={[5, 5, 4]}   color="#6acfff" intensity={5} />
+      <pointLight position={[-4, -2, 2]} color="#28A0F0" intensity={1.2} />
+      <pointLight position={[-2, -4, -2]} color="#FFD60A" intensity={2.0} />
 
-      {/* Central orb */}
-      <Orb />
-
-      {/*
-        Two rings only — both at oblique angles so neither is
-        edge-on to the camera. The old third ring (rx = PI/2)
-        was exactly 90° to the view, causing the horizontal line.
-      */}
-      <Ring
-        radius={2.1}
-        tube={0.022}
-        color="#28A0F0"
-        rx={Math.PI / 3}
-        ry={0}
-        rz={0.12}
-        speed={0.22}
-        opacity={0.82}
-      />
-      <Ring
-        radius={1.78}
-        tube={0.015}
-        color="#FFD60A"
-        rx={Math.PI / 5.5}
-        ry={0}
-        rz={Math.PI / 3}
-        speed={-0.17}
-        opacity={0.68}
-      />
-
-      {/* Circular particle clouds */}
-      <Particles count={120} color="#28A0F0" speed={0.035} size={0.045} radiusMin={2.3} radiusMax={4.5} />
-      <Particles count={42} color="#FFD60A" speed={-0.055} size={0.038} radiusMin={2.0} radiusMax={3.2} />
+      <Hub />
+      <NodeGraph />
     </Canvas>
   );
 }

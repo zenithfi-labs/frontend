@@ -1,6 +1,5 @@
 "use client";
 
-import dynamic from "next/dynamic";
 import { useRef, useEffect, useState } from "react";
 import {
   motion,
@@ -9,12 +8,6 @@ import {
   useMotionValue,
   animate,
 } from "framer-motion";
-
-// Three.js scene — SSR disabled (browser-only)
-const HeroScene = dynamic(() => import("@/components/HeroScene"), {
-  ssr: false,
-  loading: () => <div className="w-full h-full" />,
-});
 
 // ── Animation variants ─────────────────────────────────────
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -138,13 +131,6 @@ function IconRebalance() {
   );
 }
 
-function IconArrow() {
-  return (
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M5 12h14M13 6l6 6-6 6" />
-    </svg>
-  );
-}
 
 function IconMenu() {
   return (
@@ -162,6 +148,54 @@ function IconClose() {
   );
 }
 
+function IconChevronDown() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M6 9l6 6 6-6" />
+    </svg>
+  );
+}
+
+// ── Layered pill button (outer border + inner pill + top glow streak) ──
+function PillButton({
+  children,
+  variant = "dark",
+  className = "",
+  onClick,
+}: {
+  children: React.ReactNode;
+  variant?: "dark" | "light";
+  className?: string;
+  onClick?: () => void;
+}) {
+  const isDark = variant === "dark";
+  return (
+    <button
+      onClick={onClick}
+      className={`relative rounded-full cursor-pointer hover:opacity-90 transition-opacity ${className}`}
+      style={{ border: "0.6px solid rgba(255,255,255,0.85)", padding: "1px" }}
+    >
+      {/* Top-edge glow streak */}
+      <span
+        aria-hidden
+        className="pointer-events-none absolute left-1/2 -translate-x-1/2 top-0 w-1/2 rounded-full blur-md"
+        style={{ height: "6px", background: "rgba(255,255,255,0.55)", marginTop: "-3px" }}
+      />
+      {/* Inner pill */}
+      <span
+        className="relative block rounded-full font-body font-medium text-sm leading-none"
+        style={{
+          background: isDark ? "#000000" : "#ffffff",
+          color: isDark ? "#ffffff" : "#000000",
+          padding: "11px 29px",
+        }}
+      >
+        {children}
+      </span>
+    </button>
+  );
+}
+
 // ── Main page ──────────────────────────────────────────────
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -169,172 +203,153 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-[#0A0A0B] text-white overflow-x-hidden">
 
-      {/* ══ NAVBAR ══════════════════════════════════════════ */}
-      <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 md:px-14 py-4 border-b border-white/[0.05] bg-[#0A0A0B]/80 backdrop-blur-md">
-        <div className="font-display text-lg font-bold tracking-[0.32em] text-white">
-          ZENITH
-        </div>
+      {/* ══ HERO — full-screen video background ══════════════ */}
+      <section className="relative min-h-screen bg-black overflow-hidden">
 
-        {/* Desktop links */}
-        <div className="hidden md:flex items-center gap-9">
-          {["Docs", "GitHub", "Twitter"].map((link) => (
-            <a key={link} href="#" className="font-code text-[11px] text-white/38 hover:text-white/80 transition-colors tracking-[0.18em] uppercase">
-              {link}
-            </a>
-          ))}
-        </div>
+        {/* Background video */}
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover"
+        >
+          <source
+            src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260217_030345_246c0224-10a4-422c-b324-070b7c0eceda.mp4"
+            type="video/mp4"
+          />
+        </video>
 
-        <div className="flex items-center gap-3">
-          <button className="btn-shimmer px-5 py-2.5 bg-[#28A0F0] text-white font-body font-semibold text-xs tracking-[0.18em] uppercase transition-all duration-200 hover:bg-[#28A0F0]/88 hover:shadow-[0_0_28px_rgba(40,160,240,0.5)]">
-            Launch App
-          </button>
-          {/* Mobile hamburger */}
-          <button
-            className="md:hidden p-2 text-white/60 hover:text-white transition-colors"
-            onClick={() => setMenuOpen((v) => !v)}
-            aria-label="Toggle menu"
-          >
-            {menuOpen ? <IconClose /> : <IconMenu />}
-          </button>
-        </div>
-      </nav>
+        {/* 50% black overlay for readability */}
+        <div className="absolute inset-0 bg-black/50" aria-hidden="true" />
 
-      {/* ══ MOBILE MENU ══════════════════════════════════════ */}
-      <AnimatePresence>
-        {menuOpen && (
+        {/* ── NAVBAR (floats over video) ─────────────────── */}
+        <nav className="relative z-20 flex items-center justify-between px-6 md:px-[7.5rem] py-5">
+
+          {/* Left: wordmark + nav links */}
+          <div className="flex items-center gap-[30px]">
+            <span className="font-display font-bold text-white tracking-[0.32em] text-base">
+              ZENITH
+            </span>
+            <div className="hidden md:flex items-center gap-[30px]">
+              {["Protocol", "Developers", "Assets", "Docs"].map((link) => (
+                <button
+                  key={link}
+                  className="flex items-center gap-[6px] text-white text-sm font-body font-medium hover:text-white/70 transition-colors"
+                >
+                  {link}
+                  <IconChevronDown />
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Right: pill button + mobile hamburger */}
+          <div className="flex items-center gap-3">
+            <PillButton variant="dark">Join Waitlist</PillButton>
+            <button
+              className="md:hidden p-2 text-white/60 hover:text-white transition-colors"
+              onClick={() => setMenuOpen((v) => !v)}
+              aria-label="Toggle menu"
+            >
+              {menuOpen ? <IconClose /> : <IconMenu />}
+            </button>
+          </div>
+        </nav>
+
+        {/* ── MOBILE MENU ─────────────────────────────────── */}
+        <AnimatePresence>
+          {menuOpen && (
+            <motion.div
+              key="mobile-menu"
+              initial={{ opacity: 0, y: -8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.22 }}
+              className="absolute top-[65px] left-0 right-0 z-30 bg-black/90 backdrop-blur-xl px-6 py-6 flex flex-col gap-5"
+            >
+              {["Protocol", "Developers", "Assets", "Docs"].map((link) => (
+                <button
+                  key={link}
+                  onClick={() => setMenuOpen(false)}
+                  className="text-left font-body text-sm text-white/60 hover:text-white transition-colors"
+                >
+                  {link}
+                </button>
+              ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* ── HERO CONTENT ────────────────────────────────── */}
+        <motion.div
+          variants={stagger}
+          initial="hidden"
+          animate="visible"
+          className="relative z-10 flex flex-col items-center text-center px-6 pt-[200px] md:pt-[280px] pb-[102px] gap-10"
+        >
+          {/* Badge */}
           <motion.div
-            key="mobile-menu"
-            initial={{ opacity: 0, y: -8 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -8 }}
-            transition={{ duration: 0.22 }}
-            className="fixed top-[61px] left-0 right-0 z-40 border-b border-white/[0.06] bg-[#0A0A0B]/95 backdrop-blur-xl px-6 py-6 flex flex-col gap-5"
+            variants={fadeUp}
+            className="flex items-center gap-2.5 px-4 py-2 font-body font-medium text-[13px]"
+            style={{
+              borderRadius: "20px",
+              background: "rgba(255,255,255,0.10)",
+              border: "1px solid rgba(255,255,255,0.20)",
+            }}
           >
-            {["Docs", "GitHub", "Twitter"].map((link) => (
-              <a
-                key={link}
-                href="#"
-                onClick={() => setMenuOpen(false)}
-                className="font-code text-sm text-white/50 hover:text-white transition-colors tracking-[0.2em] uppercase"
-              >
-                {link}
-              </a>
-            ))}
+            <span className="w-1 h-1 rounded-full bg-white shrink-0" />
+            <span className="text-white/60">Early access available from</span>
+            <span className="text-white">Q3 2025</span>
           </motion.div>
-        )}
-      </AnimatePresence>
 
-      {/* ══ HERO — split layout ══════════════════════════════ */}
-      <section className="relative min-h-screen flex items-center px-6 md:px-14 pt-20 pb-10 overflow-hidden">
+          {/* Heading */}
+          <motion.h1
+            variants={fadeUp}
+            className="font-body font-medium leading-[1.28] max-w-[613px]"
+            style={{
+              fontSize: "clamp(2.25rem, 5vw, 3.5rem)",
+              background: "linear-gradient(144.5deg, #ffffff 28%, rgba(0,0,0,0) 115%)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              backgroundClip: "text",
+            }}
+          >
+            Institutional Yield for Real-World Assets
+          </motion.h1>
 
-        {/* Background glows */}
-        <div className="hero-glow" aria-hidden="true" />
-        <div className="hero-glow-secondary" aria-hidden="true" />
-        <div className="absolute inset-0 hero-grid opacity-[0.28]" aria-hidden="true" />
+          {/* Subtitle */}
+          <motion.p
+            variants={fadeUp}
+            className="font-body font-normal text-[15px] text-white/70 max-w-[640px] leading-relaxed -mt-4"
+          >
+            Institutional-grade yield optimization on tokenized real-world assets.
+            Your capital automatically routed to the highest-yielding T-Bills, Gold,
+            and Credit — at Rust-speed on Arbitrum.
+          </motion.p>
 
-        {/* Edge vignette */}
+          {/* CTA */}
+          <motion.div variants={fadeUp}>
+            <PillButton variant="light">Join Waitlist</PillButton>
+          </motion.div>
+        </motion.div>
+
+        {/* Bottom fade — blends hero into the page below */}
         <div
-          className="absolute inset-0 pointer-events-none"
-          style={{ background: "radial-gradient(ellipse 90% 80% at 50% 50%, transparent 35%, #0A0A0B 100%)" }}
+          className="absolute bottom-0 left-0 right-0 h-48 pointer-events-none z-10"
+          style={{ background: "linear-gradient(to bottom, transparent, #0A0A0B)" }}
           aria-hidden="true"
         />
 
-        <div className="relative z-10 w-full max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-6">
-
-          {/* ── LEFT: text ──────────────────────────────── */}
-          <motion.div
-            className="flex flex-col items-start max-w-2xl"
-            variants={stagger}
-            initial="hidden"
-            animate="visible"
-          >
-            {/* Badge */}
-            <motion.div variants={fadeUp} className="flex items-center gap-2 mb-8 px-3.5 py-1.5 border border-[#28A0F0]/25 bg-[#28A0F0]/[0.07]">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#28A0F0] animate-pulse" />
-              <span className="font-code text-[10px] text-[#28A0F0] tracking-[0.4em] uppercase">
-                Powered by Arbitrum · Stylus + Rust
-              </span>
-            </motion.div>
-
-            {/* Heading */}
-            <motion.h1
-              variants={fadeUp}
-              className="zenith-gradient font-display font-bold leading-none mb-5"
-              style={{ fontSize: "clamp(4.5rem, 11vw, 9rem)", letterSpacing: "0.15em" }}
-            >
-              ZENITH
-            </motion.h1>
-
-            {/* Tagline — now in body font */}
-            <motion.p
-              variants={fadeUp}
-              className="font-body text-xl md:text-2xl text-white/60 font-medium mb-4 leading-snug max-w-lg"
-            >
-              The High-Performance Yield Layer
-              <br />
-              <span className="text-white/40 text-lg md:text-xl font-normal">for Real-World Assets on Arbitrum</span>
-            </motion.p>
-
-            {/* Description */}
-            <motion.p variants={fadeUp} className="font-body text-sm text-white/30 max-w-md leading-relaxed mb-10">
-              Institutional-grade RWA yield aggregator. Your stablecoins are automatically
-              routed to the highest-yielding tokenized assets — T-Bills, Gold, Credit —
-              at Rust-speed with extreme gas efficiency.
-            </motion.p>
-
-            {/* CTAs */}
-            <motion.div variants={fadeUp} className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
-              <motion.button
-                whileHover={{ y: -2, boxShadow: "0 0 52px rgba(40,160,240,0.55)" }}
-                whileTap={{ scale: 0.97 }}
-                transition={{ type: "spring", stiffness: 400, damping: 25 }}
-                className="btn-shimmer group flex items-center gap-2.5 px-9 py-4 bg-[#28A0F0] text-white font-body font-semibold text-sm tracking-[0.16em] uppercase"
-              >
-                Launch App
-                <span className="group-hover:translate-x-1 transition-transform duration-200">
-                  <IconArrow />
-                </span>
-              </motion.button>
-
-              <motion.button
-                whileHover={{ y: -2 }}
-                whileTap={{ scale: 0.97 }}
-                transition={{ type: "spring", stiffness: 400, damping: 25 }}
-                className="flex items-center gap-2.5 px-9 py-4 border border-white/10 hover:border-white/22 text-white/45 hover:text-white/75 font-body font-medium text-sm tracking-[0.16em] uppercase transition-colors duration-200"
-              >
-                Read Docs
-              </motion.button>
-            </motion.div>
-
-            {/* Trust line */}
-            <motion.div variants={fadeUp} className="mt-10 flex items-center gap-3 opacity-35">
-              <div className="w-6 h-px bg-white/30" />
-              <span className="font-code text-[9px] text-white/40 tracking-[0.3em] uppercase">
-                Audited · Non-custodial · On-chain
-              </span>
-            </motion.div>
-          </motion.div>
-
-          {/* ── RIGHT: 3D scene ──────────────────────────── */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1], delay: 0.3 }}
-            className="w-full max-w-[460px] lg:max-w-[540px] aspect-square shrink-0"
-          >
-            <HeroScene />
-          </motion.div>
-        </div>
-
         {/* Scroll hint */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-20 pointer-events-none">
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-25 pointer-events-none z-20">
           <span className="font-code text-[9px] tracking-[0.4em] text-white/50 uppercase">Scroll</span>
           <div className="w-px h-10 bg-gradient-to-b from-white/40 to-transparent" />
         </div>
       </section>
 
       {/* ══ STATS BAR ══════════════════════════════════════ */}
-      <section className="border-y border-white/[0.05] bg-white/[0.014]">
+      <section className="border-b border-white/[0.05] bg-white/[0.014]">
         <motion.div
           variants={stagger}
           initial="hidden"
@@ -343,37 +358,37 @@ export default function Home() {
           className="max-w-5xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-white/[0.05]"
         >
           <motion.div variants={fadeUp} className="flex flex-col items-center text-center py-10 md:py-12 px-8">
-            <span className="font-code text-[10px] text-white/25 tracking-[0.35em] uppercase mb-4">
+            <span className="font-body text-xs text-white/40 tracking-[0.08em] mb-4">
               Total Value Locked
             </span>
-            <span className="font-display text-[2.7rem] font-bold text-white tracking-wide leading-none">
+            <span className="font-body text-[2.7rem] font-semibold text-white leading-none">
               $<StatCounter value={2.4} decimals={1} suffix="B+" />
             </span>
-            <span className="font-code text-[10px] text-white/22 tracking-wider mt-2">
+            <span className="font-body text-xs text-white/30 mt-2">
               Across all vaults
             </span>
           </motion.div>
 
           <motion.div variants={fadeUp} className="flex flex-col items-center text-center py-10 md:py-12 px-8">
-            <span className="font-code text-[10px] text-white/25 tracking-[0.35em] uppercase mb-4">
+            <span className="font-body text-xs text-white/40 tracking-[0.08em] mb-4">
               Average APY
             </span>
-            <span className="font-display text-[2.7rem] font-bold text-[#FFD60A] tracking-wide leading-none">
+            <span className="font-body text-[2.7rem] font-semibold text-[#FFD60A] leading-none">
               <StatCounter value={12.8} decimals={1} suffix="%" />
             </span>
-            <span className="font-code text-[10px] text-white/22 tracking-wider mt-2">
+            <span className="font-body text-xs text-white/30 mt-2">
               30-day trailing average
             </span>
           </motion.div>
 
           <motion.div variants={fadeUp} className="flex flex-col items-center text-center py-10 md:py-12 px-8">
-            <span className="font-code text-[10px] text-white/25 tracking-[0.35em] uppercase mb-4">
+            <span className="font-body text-xs text-white/40 tracking-[0.08em] mb-4">
               Gas Saved vs Competitors
             </span>
-            <span className="font-display text-[2.7rem] font-bold text-white tracking-wide leading-none">
+            <span className="font-body text-[2.7rem] font-semibold text-white leading-none">
               <StatCounter value={94} suffix="%" />
             </span>
-            <span className="font-code text-[10px] text-white/22 tracking-wider mt-2">
+            <span className="font-body text-xs text-white/30 mt-2">
               Arbitrum Stylus efficiency
             </span>
           </motion.div>
@@ -391,11 +406,11 @@ export default function Home() {
             viewport={{ once: true, margin: "-80px" }}
             className="text-center mb-24"
           >
-            <motion.span variants={fadeUp} className="font-code text-[10px] text-[#28A0F0] tracking-[0.45em] uppercase block mb-4">
+            <motion.span variants={fadeUp} className="font-body text-xs text-white/45 tracking-[0.15em] uppercase block mb-4">
               Process
             </motion.span>
-            <motion.h2 variants={fadeUp} className="font-display text-3xl md:text-4xl font-bold tracking-[0.12em] text-white">
-              HOW IT WORKS
+            <motion.h2 variants={fadeUp} className="font-body text-3xl md:text-4xl font-semibold tracking-tight text-white">
+              How It Works
             </motion.h2>
           </motion.div>
 
@@ -453,16 +468,16 @@ export default function Home() {
                     {step.icon}
                   </div>
                   <div
-                    className="absolute -top-1.5 -right-1.5 w-6 h-6 flex items-center justify-center"
+                    className="absolute -top-1.5 -right-1.5 w-6 h-6 rounded-full flex items-center justify-center"
                     style={{ background: step.numBg }}
                   >
-                    <span className={`font-code text-[9px] font-bold ${step.numColor}`}>{step.num}</span>
+                    <span className={`font-body text-[9px] font-semibold ${step.numColor}`}>{step.num}</span>
                   </div>
                 </div>
-                <h3 className="font-display text-sm font-bold tracking-[0.14em] text-white mb-3 uppercase">
+                <h3 className="font-body text-sm font-semibold text-white mb-3">
                   {step.title}
                 </h3>
-                <p className="font-body text-xs text-white/35 leading-loose max-w-[15rem]">
+                <p className="font-body text-xs text-white/40 leading-relaxed max-w-[15rem]">
                   {step.desc}
                 </p>
               </motion.div>
@@ -482,11 +497,11 @@ export default function Home() {
             viewport={{ once: true, margin: "-80px" }}
             className="text-center mb-20"
           >
-            <motion.span variants={fadeUp} className="font-code text-[10px] text-[#28A0F0] tracking-[0.45em] uppercase block mb-4">
+            <motion.span variants={fadeUp} className="font-body text-xs text-white/45 tracking-[0.15em] uppercase block mb-4">
               Infrastructure
             </motion.span>
-            <motion.h2 variants={fadeUp} className="font-display text-3xl md:text-4xl font-bold tracking-[0.12em] text-white">
-              BUILT FOR INSTITUTIONS
+            <motion.h2 variants={fadeUp} className="font-body text-3xl md:text-4xl font-semibold tracking-tight text-white">
+              Built for Institutions
             </motion.h2>
           </motion.div>
 
@@ -548,7 +563,7 @@ export default function Home() {
                   }}
                 >
                   <div
-                    className="w-11 h-11 flex items-center justify-center mb-7 transition-all duration-300"
+                    className="w-11 h-11 rounded-xl flex items-center justify-center mb-7 transition-all duration-300"
                     style={{
                       border: `1px solid ${card.iconColor}30`,
                       background: `${card.iconColor}0d`,
@@ -557,10 +572,10 @@ export default function Home() {
                   >
                     {card.icon}
                   </div>
-                  <h3 className="font-display text-sm font-bold tracking-[0.13em] text-white mb-3 uppercase">
+                  <h3 className="font-body text-sm font-semibold text-white mb-3">
                     {card.title}
                   </h3>
-                  <p className="font-body text-sm text-white/36 leading-relaxed">
+                  <p className="font-body text-sm text-white/40 leading-relaxed">
                     {card.desc}
                   </p>
                 </motion.div>
@@ -581,13 +596,13 @@ export default function Home() {
             viewport={{ once: true, margin: "-80px" }}
             className="text-center mb-16"
           >
-            <motion.span variants={fadeUp} className="font-code text-[10px] text-[#28A0F0] tracking-[0.45em] uppercase block mb-4">
+            <motion.span variants={fadeUp} className="font-body text-xs text-white/45 tracking-[0.15em] uppercase block mb-4">
               Ecosystem
             </motion.span>
-            <motion.h2 variants={fadeUp} className="font-display text-3xl md:text-4xl font-bold tracking-[0.12em] text-white mb-4">
-              SUPPORTED ASSETS
+            <motion.h2 variants={fadeUp} className="font-body text-3xl md:text-4xl font-semibold tracking-tight text-white mb-4">
+              Supported Assets
             </motion.h2>
-            <motion.p variants={fadeUp} className="font-body text-sm text-white/28 tracking-wide">
+            <motion.p variants={fadeUp} className="font-body text-sm text-white/40">
               Deposit once. Earn across the entire real-world asset landscape.
             </motion.p>
           </motion.div>
@@ -617,11 +632,11 @@ export default function Home() {
                   className={`w-9 h-9 rounded-full flex items-center justify-center shrink-0 ${asset.border ?? ""}`}
                   style={{ background: asset.bg }}
                 >
-                  <span className={`font-display text-sm font-bold ${asset.text}`}>{asset.symbol}</span>
+                  <span className={`font-body text-sm font-semibold ${asset.text}`}>{asset.symbol}</span>
                 </div>
                 <div>
-                  <div className="font-display text-xs font-bold tracking-[0.1em] text-white">{asset.ticker}</div>
-                  <div className="font-code text-[9px] text-white/26 mt-0.5">{asset.name}</div>
+                  <div className="font-body text-xs font-semibold text-white">{asset.ticker}</div>
+                  <div className="font-body text-[10px] text-white/35 mt-0.5">{asset.name}</div>
                 </div>
               </motion.div>
             ))}
@@ -635,7 +650,7 @@ export default function Home() {
             className="mt-12 flex items-center justify-center gap-3"
           >
             <div className="w-6 h-px bg-white/15" />
-            <span className="font-code text-[9px] text-white/28 tracking-[0.3em] uppercase">
+            <span className="font-body text-[11px] text-white/35">
               All vaults independently audited
             </span>
             <div className="w-6 h-px bg-white/15" />
@@ -668,33 +683,23 @@ export default function Home() {
         >
           <motion.h2
             variants={fadeUp}
-            className="font-display text-4xl md:text-[3rem] font-bold tracking-[0.08em] text-white mb-2 leading-none"
+            className="font-body text-4xl md:text-[3rem] font-semibold tracking-tight text-white mb-2 leading-[1.15]"
           >
-            START EARNING ON
+            Start earning on
           </motion.h2>
           <motion.h2
             variants={fadeUp}
-            className="font-display text-4xl md:text-[3rem] font-bold tracking-[0.08em] mb-8 leading-none"
-            style={{ color: "#FFD60A" }}
+            className="font-body text-4xl md:text-[3rem] font-semibold tracking-tight text-white/60 mb-8 leading-[1.15]"
           >
-            REAL-WORLD ASSETS
+            real-world assets.
           </motion.h2>
-          <motion.p variants={fadeUp} className="font-body text-sm text-white/30 leading-relaxed mb-10 max-w-sm mx-auto">
+          <motion.p variants={fadeUp} className="font-body text-sm text-white/40 leading-relaxed mb-10 max-w-sm mx-auto">
             Join institutional capital already deployed across Zenith vaults.
             No lock-ups. Full on-chain transparency.
           </motion.p>
-          <motion.button
-            variants={fadeUp}
-            whileHover={{ y: -3, boxShadow: "0 0 64px rgba(40,160,240,0.6)" }}
-            whileTap={{ scale: 0.97 }}
-            transition={{ type: "spring", stiffness: 400, damping: 25 }}
-            className="btn-shimmer group flex items-center gap-2.5 px-12 py-4 bg-[#28A0F0] text-white font-body font-semibold text-sm tracking-[0.2em] uppercase mx-auto"
-          >
-            Launch App
-            <span className="group-hover:translate-x-1 transition-transform duration-200">
-              <IconArrow />
-            </span>
-          </motion.button>
+          <motion.div variants={fadeUp} className="flex justify-center">
+            <PillButton variant="light">Join Waitlist</PillButton>
+          </motion.div>
         </motion.div>
       </section>
 
@@ -709,7 +714,7 @@ export default function Home() {
               <div className="font-display text-xl font-bold tracking-[0.32em] text-white mb-1.5">
                 ZENITH
               </div>
-              <div className="font-code text-[10px] text-white/22 tracking-[0.1em]">
+              <div className="font-body text-xs text-white/30">
                 The High-Performance Yield Layer for Real-World Assets on Arbitrum
               </div>
             </div>
@@ -719,7 +724,7 @@ export default function Home() {
                 <a
                   key={link}
                   href="#"
-                  className="font-code text-[11px] text-white/30 hover:text-white/65 transition-colors tracking-[0.18em] uppercase"
+                  className="font-body text-sm text-white/35 hover:text-white/70 transition-colors"
                 >
                   {link}
                 </a>
@@ -731,10 +736,10 @@ export default function Home() {
             className="pt-7 flex flex-col md:flex-row items-center justify-between gap-3"
             style={{ borderTop: "1px solid rgba(255,255,255,0.04)" }}
           >
-            <span className="font-code text-[10px] text-white/16 tracking-[0.2em] uppercase">
-              © 2024 Zenith Protocol. All rights reserved.
+            <span className="font-body text-xs text-white/25">
+              © 2025 Zenith Protocol. All rights reserved.
             </span>
-            <span className="font-code text-[10px] text-white/16 tracking-[0.2em] uppercase">
+            <span className="font-body text-xs text-white/25">
               Built on Arbitrum · Powered by Rust
             </span>
           </div>
