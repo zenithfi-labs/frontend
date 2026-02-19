@@ -220,8 +220,23 @@ export default function Home() {
           />
         </video>
 
-        {/* 50% black overlay for readability */}
-        <div className="absolute inset-0 bg-black/50" aria-hidden="true" />
+        {/* ── Cinematic Vignette (Focus center, dark edges) ── */}
+        <div
+          className="absolute inset-0 pointer-events-none z-0"
+          style={{
+            background: "radial-gradient(circle at center, transparent 0%, #0A0A0B 95%)",
+          }}
+          aria-hidden="true"
+        />
+
+        {/* ── Top Scrim (Protect Navbar) ── */}
+        <div
+          className="absolute top-0 left-0 right-0 h-40 pointer-events-none z-10"
+          style={{
+            background: "linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, transparent 100%)",
+          }}
+          aria-hidden="true"
+        />
 
         {/* ── NAVBAR (floats over video) ─────────────────── */}
         <nav className="relative z-20 flex items-center justify-between px-6 md:px-[7.5rem] py-5">
@@ -282,11 +297,12 @@ export default function Home() {
         </AnimatePresence>
 
         {/* ── HERO CONTENT ────────────────────────────────── */}
+
         <motion.div
           variants={stagger}
           initial="hidden"
           animate="visible"
-          className="relative z-10 flex flex-col items-center text-center px-6 pt-[200px] md:pt-[280px] pb-[102px] gap-10"
+          className="relative z-10 flex flex-col items-center text-center px-6 pt-[180px] md:pt-[240px] pb-[120px] gap-8"
         >
           {/* Badge */}
           <motion.div
@@ -300,33 +316,34 @@ export default function Home() {
           >
             <span className="w-1 h-1 rounded-full bg-white shrink-0" />
             <span className="text-white/60">Early access available from</span>
-            <span className="text-white">Q3 2025</span>
+            <span className="text-white">Q3 2026</span>
           </motion.div>
 
           {/* Heading */}
           <motion.h1
             variants={fadeUp}
-            className="font-body font-medium leading-[1.28] max-w-[613px]"
+            className="font-body font-bold tracking-tight leading-[1.1] max-w-[800px] mb-4"
             style={{
-              fontSize: "clamp(2.25rem, 5vw, 3.5rem)",
-              background: "linear-gradient(144.5deg, #ffffff 28%, rgba(0,0,0,0) 115%)",
+              fontSize: "clamp(2.5rem, 5vw, 4rem)",
+              backgroundImage: "linear-gradient(180deg, #ffffff 0%, rgba(255,255,255,0.7) 100%)",
               WebkitBackgroundClip: "text",
               WebkitTextFillColor: "transparent",
               backgroundClip: "text",
             }}
           >
-            Institutional Yield for Real-World Assets
+            Institutional Yield for<br />Real-World Assets
           </motion.h1>
 
           {/* Subtitle */}
           <motion.p
             variants={fadeUp}
-            className="font-body font-normal text-[15px] text-white/70 max-w-[640px] leading-relaxed -mt-4"
+            className="font-body font-normal text-[15px] text-white/70 max-w-[600px] leading-relaxed -mt-2"
           >
             Institutional-grade yield optimization on tokenized real-world assets.
             Your capital automatically routed to the highest-yielding T-Bills, Gold,
             and Credit — at Rust-speed on Arbitrum.
           </motion.p>
+
 
           {/* CTA */}
           <motion.div variants={fadeUp}>
@@ -348,57 +365,64 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ══ STATS BAR ══════════════════════════════════════ */}
-      <section className="border-b border-white/[0.05] bg-white/[0.014]">
+      {/* ══ STATS BAR (Premium Glass Panel) ══════════════════ */}
+      <section className="relative z-20 -mt-16 px-6 md:px-0">
         <motion.div
           variants={stagger}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: "-60px" }}
-          className="max-w-5xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-white/[0.05]"
+          className="max-w-5xl mx-auto rounded-3xl border border-white/10 bg-[#0A0A0B]/60 backdrop-blur-md shadow-2xl shadow-black/50 overflow-hidden"
         >
-          <motion.div variants={fadeUp} className="flex flex-col items-center text-center py-10 md:py-12 px-8">
-            <span className="font-body text-xs text-white/40 tracking-[0.08em] mb-4">
-              Total Value Locked
-            </span>
-            <span className="font-body text-[2.7rem] font-semibold text-white leading-none">
-              $<StatCounter value={2.4} decimals={1} suffix="B+" />
-            </span>
-            <span className="font-body text-xs text-white/30 mt-2">
-              Across all vaults
-            </span>
-          </motion.div>
+          <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-white/5">
+            <motion.div variants={fadeUp} className="flex flex-col items-center text-center py-10 px-8 relative group">
+              <div className="absolute inset-0 bg-gradient-to-b from-white/[0.03] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <span className="relative font-body text-xs text-white/50 tracking-[0.08em] uppercase mb-3">
+                Total Value Locked
+              </span>
+              <span className="relative font-body text-4xl md:text-5xl font-bold text-white tracking-tight">
+                $<StatCounter value={2.4} decimals={1} suffix="B" />
+              </span>
+              <span className="relative font-body text-[11px] text-white/30 mt-3 bg-white/[0.05] px-2 py-1 rounded-full border border-white/[0.05]">
+                Across all vaults
+              </span>
+            </motion.div>
 
-          <motion.div variants={fadeUp} className="flex flex-col items-center text-center py-10 md:py-12 px-8">
-            <span className="font-body text-xs text-white/40 tracking-[0.08em] mb-4">
-              Average APY
-            </span>
-            <span className="font-body text-[2.7rem] font-semibold text-[#FFD60A] leading-none">
-              <StatCounter value={12.8} decimals={1} suffix="%" />
-            </span>
-            <span className="font-body text-xs text-white/30 mt-2">
-              30-day trailing average
-            </span>
-          </motion.div>
+            <motion.div variants={fadeUp} className="flex flex-col items-center text-center py-10 px-8 relative group">
+              <div className="absolute inset-0 bg-gradient-to-b from-[#FFD60A]/[0.02] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <span className="relative font-body text-xs text-[#FFD60A]/70 tracking-[0.08em] uppercase mb-3">
+                Average APY
+              </span>
+              <span className="relative font-body text-4xl md:text-5xl font-bold text-[#FFD60A] tracking-tight drop-shadow-[0_0_15px_rgba(255,214,10,0.3)]">
+                <StatCounter value={12.8} decimals={1} suffix="%" />
+              </span>
+              <span className="relative font-body text-[11px] text-[#FFD60A]/40 mt-3 bg-[#FFD60A]/[0.05] px-2 py-1 rounded-full border border-[#FFD60A]/10">
+                30-day trailing avg
+              </span>
+            </motion.div>
 
-          <motion.div variants={fadeUp} className="flex flex-col items-center text-center py-10 md:py-12 px-8">
-            <span className="font-body text-xs text-white/40 tracking-[0.08em] mb-4">
-              Gas Saved vs Competitors
-            </span>
-            <span className="font-body text-[2.7rem] font-semibold text-white leading-none">
-              <StatCounter value={94} suffix="%" />
-            </span>
-            <span className="font-body text-xs text-white/30 mt-2">
-              Arbitrum Stylus efficiency
-            </span>
-          </motion.div>
+            <motion.div variants={fadeUp} className="flex flex-col items-center text-center py-10 px-8 relative group">
+              <div className="absolute inset-0 bg-gradient-to-b from-white/[0.03] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <span className="relative font-body text-xs text-white/50 tracking-[0.08em] uppercase mb-3">
+                Gas Efficiency
+              </span>
+              <span className="relative font-body text-4xl md:text-5xl font-bold text-white tracking-tight">
+                <StatCounter value={94} suffix="%" />
+              </span>
+              <span className="relative font-body text-[11px] text-white/30 mt-3 bg-white/[0.05] px-2 py-1 rounded-full border border-white/[0.05]">
+                vs Competitors
+              </span>
+            </motion.div>
+          </div>
         </motion.div>
       </section>
 
-      {/* ══ HOW IT WORKS ════════════════════════════════════ */}
-      <section className="py-32 px-6">
-        <div className="max-w-5xl mx-auto">
+      {/* ══ HOW IT WORKS (With Ambient BG) ══════════════════ */}
+      <section className="relative py-40 px-6 overflow-hidden">
+        {/* Glow Blob - Blue Left */}
+        <div className="glow-blob glow-blue top-20 -left-64" />
 
+        <div className="max-w-5xl mx-auto relative z-10">
           <motion.div
             variants={stagger}
             initial="hidden"
@@ -406,11 +430,14 @@ export default function Home() {
             viewport={{ once: true, margin: "-80px" }}
             className="text-center mb-24"
           >
-            <motion.span variants={fadeUp} className="font-body text-xs text-white/45 tracking-[0.15em] uppercase block mb-4">
-              Process
-            </motion.span>
-            <motion.h2 variants={fadeUp} className="font-body text-3xl md:text-4xl font-semibold tracking-tight text-white">
-              How It Works
+            <motion.div variants={fadeUp} className="inline-flex items-center justify-center px-4 py-1.5 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm mb-6">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#28A0F0] mr-2 animate-pulse" />
+              <span className="font-body text-[11px] font-semibold tracking-wider text-white/70 uppercase">
+                Automated Yield
+              </span>
+            </motion.div>
+            <motion.h2 variants={fadeUp} className="font-body text-4xl md:text-5xl font-bold tracking-tight text-white mb-6">
+              Institutional Grade.<br /><span className="text-white/40">Zero Complexity.</span>
             </motion.h2>
           </motion.div>
 
@@ -419,65 +446,59 @@ export default function Home() {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-60px" }}
-            className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-6 relative"
+            className="grid grid-cols-1 md:grid-cols-3 gap-12 relative"
           >
-            {/* Connector — properly centered between the three icon circles */}
-            <div
-              className="hidden md:block absolute top-[3.2rem] h-px"
-              style={{
-                left: "calc(16.67% + 52px)",
-                right: "calc(16.67% + 52px)",
-                background: "linear-gradient(90deg, rgba(40,160,240,0.4), rgba(255,214,10,0.4), rgba(40,160,240,0.4))",
-              }}
-              aria-hidden="true"
-            />
+            {/* Connector Line (Desktop) - behind everything */}
+            <div className="hidden md:block absolute top-12 left-[10%] right-[10%] h-px bg-gradient-to-r from-transparent via-white/10 to-transparent z-0 pointer-events-none border-t border-dashed border-white/10" />
 
             {[
               {
                 icon: <IconDeposit />,
                 num: "01",
-                numBg: "#28A0F0",
-                numColor: "text-white",
-                title: "Deposit Stablecoin",
-                desc: "Deposit USDC or USDT into Zenith vaults. Receive zTokens that accrue yield in real-time from every RWA position.",
+                title: "Deposit",
+                desc: "Deposit USDC or USDT. Receive zTokens that accrue yield real-time.",
               },
               {
                 icon: <IconAllocation />,
                 num: "02",
-                numBg: "#FFD60A",
-                numColor: "text-[#0A0A0B]",
-                title: "Smart Allocation",
-                desc: "Our Rust engine on Arbitrum Stylus evaluates yield and risk across T-Bills, Gold, and Credit in real-time — routing capital to the optimal mix.",
+                title: "Smart Allocate",
+                desc: "Rust engine evaluates risk across T-Bills & Gold instantly.",
               },
               {
                 icon: <IconRebalance />,
                 num: "03",
-                numBg: "#28A0F0",
-                numColor: "text-white",
-                title: "Auto Rebalancing",
-                desc: "When yields shift, Zenith rebalances automatically. No manual effort. 94% cheaper than competitors.",
+                title: "Auto Rebalance",
+                desc: "Yields shift, Zenith moves capital. 94% cheaper gas via Stylus.",
               },
-            ].map((step) => (
+            ].map((step, i) => (
               <motion.div
-                key={step.num}
+                key={i}
                 variants={fadeUp}
-                className="flex flex-col items-center text-center"
+                className="flex flex-col items-center text-center relative z-10 group"
               >
-                <div className="relative mb-7">
-                  <div className="w-[6.5rem] h-[6.5rem] rounded-full border border-white/[0.08] bg-white/[0.022] flex items-center justify-center text-white/65">
-                    {step.icon}
-                  </div>
-                  <div
-                    className="absolute -top-1.5 -right-1.5 w-6 h-6 rounded-full flex items-center justify-center"
-                    style={{ background: step.numBg }}
-                  >
-                    <span className={`font-body text-[9px] font-semibold ${step.numColor}`}>{step.num}</span>
-                  </div>
+                {/* Huge Watermark Number */}
+                <span
+                  className="absolute -top-14 left-1/2 -translate-x-1/2 text-[120px] font-bold select-none pointer-events-none font-body z-0 opacity-20"
+                  style={{
+                    color: "transparent",
+                    WebkitTextStroke: "2px rgba(255,255,255,1)",
+                    lineHeight: "100px",
+                  }}
+                >
+                  {step.num}
+                </span>
+
+                {/* Glass Icon Box */}
+                <div className="w-20 h-20 rounded-2xl bg-[#0A0A0B] border border-white/10 flex items-center justify-center text-white shadow-xl shadow-black/50 z-10 mb-6 group-hover:border-white/20 transition-colors relative">
+                  {/* Inner glow */}
+                  <div className="absolute inset-0 rounded-2xl bg-white/[0.02] pointer-events-none" />
+                  {step.icon}
                 </div>
-                <h3 className="font-body text-sm font-semibold text-white mb-3">
+
+                <h3 className="font-body text-xl font-bold text-white mb-3 relative z-10">
                   {step.title}
                 </h3>
-                <p className="font-body text-xs text-white/40 leading-relaxed max-w-[15rem]">
+                <p className="font-body text-sm text-white/50 leading-relaxed max-w-[260px] relative z-10">
                   {step.desc}
                 </p>
               </motion.div>
@@ -486,175 +507,117 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ══ FEATURES ════════════════════════════════════════ */}
-      <section className="py-32 px-6" style={{ background: "rgba(255,255,255,0.012)" }}>
-        <div className="max-w-5xl mx-auto">
-
-          <motion.div
-            variants={stagger}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-80px" }}
-            className="text-center mb-20"
-          >
-            <motion.span variants={fadeUp} className="font-body text-xs text-white/45 tracking-[0.15em] uppercase block mb-4">
-              Infrastructure
-            </motion.span>
-            <motion.h2 variants={fadeUp} className="font-body text-3xl md:text-4xl font-semibold tracking-tight text-white">
-              Built for Institutions
-            </motion.h2>
-          </motion.div>
-
-          <motion.div
-            variants={stagger}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-60px" }}
-            className="grid grid-cols-1 md:grid-cols-2 gap-4"
-          >
-            {[
-              {
-                icon: <IconVault />,
-                iconColor: "#28A0F0",
-                title: "Smart RWA Vaults",
-                desc: "Non-custodial, diversified exposure to tokenized T-Bills, institutional gold, and premium yield instruments — from a single unified vault position.",
-              },
-              {
-                icon: <IconRust />,
-                iconColor: "#FFD60A",
-                title: "Rust-Powered Engine",
-                desc: "Sub-millisecond execution via Arbitrum Stylus. Enterprise-grade reliability with zero runtime overhead, 10× faster and 50× cheaper than EVM-only alternatives.",
-              },
-              {
-                icon: <IconMultiAsset />,
-                iconColor: "#FFD60A",
-                title: "Multi-Asset Exposure",
-                desc: "Access 10+ real-world asset classes through a single interface — stablecoins, precious metals, government securities, and tokenized credit.",
-              },
-              {
-                icon: <IconDashboard />,
-                iconColor: "#28A0F0",
-                title: "Real-Time Dashboard",
-                desc: "Institutional analytics with live P&L tracking, yield attribution, and risk exposure breakdowns — powered by Chainlink feeds, updated every block.",
-              },
-            ].map((card) => {
-              const isBlue = card.iconColor === "#28A0F0";
-              return (
-                <motion.div
-                  key={card.title}
-                  variants={fadeUp}
-                  whileHover={{ y: -4 }}
-                  transition={{ type: "spring", stiffness: 300, damping: 22 }}
-                  className="glass-card p-8 group cursor-default"
-                  style={{
-                    transition: "border-color 0.3s, box-shadow 0.3s",
-                  }}
-                  onMouseEnter={(e) => {
-                    (e.currentTarget as HTMLElement).style.borderColor = isBlue
-                      ? "rgba(40,160,240,0.25)"
-                      : "rgba(255,214,10,0.2)";
-                    (e.currentTarget as HTMLElement).style.boxShadow = isBlue
-                      ? "0 8px 48px rgba(40,160,240,0.08)"
-                      : "0 8px 48px rgba(255,214,10,0.06)";
-                  }}
-                  onMouseLeave={(e) => {
-                    (e.currentTarget as HTMLElement).style.borderColor = "";
-                    (e.currentTarget as HTMLElement).style.boxShadow = "";
-                  }}
-                >
-                  <div
-                    className="w-11 h-11 rounded-xl flex items-center justify-center mb-7 transition-all duration-300"
-                    style={{
-                      border: `1px solid ${card.iconColor}30`,
-                      background: `${card.iconColor}0d`,
-                      color: card.iconColor,
-                    }}
-                  >
-                    {card.icon}
+      {/* ══ FEATURES (Dark Modern) ══════════════════════════ */}
+      <section className="relative py-32 px-6 bg-[#050505]">
+        <div className="max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center mb-24">
+            <motion.div
+              initial={{ opacity: 0, x: -50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
+            >
+              <h2 className="font-body text-4xl md:text-5xl font-bold text-white leading-tight mb-6">
+                Built on <span className="text-[#28A0F0]">Arbitrum Stylus.</span><br />
+                Powered by Rust.
+              </h2>
+              <p className="font-body text-lg text-white/50 max-w-lg mb-8">
+                Experience execution speeds 10x faster than EVM at a fraction of the cost.
+                Enterprise-grade reliability meets DeFi composability.
+              </p>
+              <PillButton variant="light">Read Technical Whitepaper</PillButton>
+            </motion.div>
+            {/* Feature Abstract Visual */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
+              className="relative h-[400px] w-full rounded-3xl overflow-hidden border border-white/10 bg-gradient-to-br from-[#111] to-black"
+            >
+              {/* Abstract grid lines simulation */}
+              <div className="absolute inset-0 opacity-20"
+                style={{ backgroundImage: 'linear-gradient(#333 1px, transparent 1px), linear-gradient(90deg, #333 1px, transparent 1px)', backgroundSize: '40px 40px' }}>
+              </div>
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="w-64 h-64 rounded-full bg-[#28A0F0] blur-[100px] opacity-20 animate-pulse"></div>
+              </div>
+              <div className="absolute bottom-6 left-6 right-6">
+                <div className="bg-white/5 backdrop-blur-md border border-white/10 p-4 rounded-xl">
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="text-[10px] font-mono text-white/40 uppercase">Execution</span>
+                    <span className="text-[10px] font-mono text-[#28A0F0]">0.4ms</span>
                   </div>
-                  <h3 className="font-body text-sm font-semibold text-white mb-3">
-                    {card.title}
-                  </h3>
-                  <p className="font-body text-sm text-white/40 leading-relaxed">
-                    {card.desc}
-                  </p>
-                </motion.div>
-              );
-            })}
-          </motion.div>
+                  <div className="w-full bg-white/10 h-1 rounded-full overflow-hidden">
+                    <div className="h-full bg-[#28A0F0] w-[95%]"></div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+
+          {/* Secondary Features Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {[
+              { title: "Non-Custodial", desc: "You hold the keys. Funds flow directly to audited vaults.", icon: <IconVault /> },
+              { title: "Multi-Asset", desc: "T-Bills, Gold, Credit. All in one unified position.", icon: <IconMultiAsset /> },
+              { title: "Live Analytics", desc: "Real-time P&L tracking powered by Chainlink.", icon: <IconDashboard /> },
+            ].map((f, i) => (
+              <div key={i} className="group p-6 rounded-2xl border border-white/5 bg-white/[0.02] hover:bg-white/[0.04] transition-colors">
+                <div className="flex items-center gap-4 mb-3">
+                  <div className="p-2 rounded-lg bg-white/5 text-white/80 group-hover:text-white transition-colors">
+                    {f.icon}
+                  </div>
+                  <h3 className="font-body text-base font-bold text-white">{f.title}</h3>
+                </div>
+                <p className="font-body text-sm text-white/40 group-hover:text-white/60 transition-colors pl-[3.25rem]">
+                  {f.desc}
+                </p>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* ══ SUPPORTED ASSETS ════════════════════════════════ */}
-      <section className="py-32 px-6">
-        <div className="max-w-5xl mx-auto">
+      {/* ══ ECOSYSTEM (Assets) ══════════════════════════════ */}
+      <section className="relative py-32 px-6 overflow-hidden">
+        {/* Glow Blob - Gold Right */}
+        <div className="glow-blob glow-gold bottom-0 -right-48 opacity-10" />
 
-          <motion.div
-            variants={stagger}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-80px" }}
-            className="text-center mb-16"
+        <div className="max-w-4xl mx-auto relative z-10 text-center">
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="font-body text-3xl md:text-4xl font-bold text-white mb-12"
           >
-            <motion.span variants={fadeUp} className="font-body text-xs text-white/45 tracking-[0.15em] uppercase block mb-4">
-              Ecosystem
-            </motion.span>
-            <motion.h2 variants={fadeUp} className="font-body text-3xl md:text-4xl font-semibold tracking-tight text-white mb-4">
-              Supported Assets
-            </motion.h2>
-            <motion.p variants={fadeUp} className="font-body text-sm text-white/40">
-              Deposit once. Earn across the entire real-world asset landscape.
-            </motion.p>
-          </motion.div>
+            Unified Liquidity Layer
+          </motion.h2>
 
-          <motion.div
-            variants={stagger}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-60px" }}
-            className="flex flex-wrap items-center justify-center gap-3"
-          >
+          <div className="flex flex-wrap justify-center gap-4">
             {[
-              { ticker: "USDC", name: "USD Coin", symbol: "$", bg: "#2775CA", text: "text-white" },
-              { ticker: "USDT", name: "Tether USD", symbol: "₮", bg: "#26A17B", text: "text-white" },
-              { ticker: "ONDO", name: "Ondo Finance", symbol: "O", bg: "rgba(255,255,255,0.06)", text: "text-white", border: "border border-white/12" },
-              { ticker: "PAXG", name: "Pax Gold", symbol: "Au", bg: "rgba(255,214,10,0.12)", text: "text-[#FFD60A]", border: "border border-[#FFD60A]/30" },
-              { ticker: "T-BILLS", name: "US Treasuries", symbol: "T", bg: "rgba(255,255,255,0.06)", text: "text-white", border: "border border-white/12" },
-            ].map((asset) => (
+              { ticker: "USDC", name: "USD Coin", bg: "#2775CA" },
+              { ticker: "USDT", name: "Tether", bg: "#26A17B" },
+              { ticker: "ONDO", name: "Ondo US Dollar Yield", bg: "#000", border: 'white/20' },
+              { ticker: "PAXG", name: "Pax Gold", bg: "#D4AF37" },
+              { ticker: "USTB", name: "US Treasuries", bg: "#333" },
+            ].map((asset, i) => (
               <motion.div
-                key={asset.ticker}
-                variants={fadeUp}
-                whileHover={{ y: -3, borderColor: "rgba(255,255,255,0.18)" }}
-                transition={{ type: "spring", stiffness: 400, damping: 25 }}
-                className="glass-card flex items-center gap-3.5 px-5 py-3.5 cursor-default"
+                key={i}
+                whileHover={{ scale: 1.05 }}
+                className="flex items-center gap-3 pr-6 pl-2 py-2 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm cursor-default hover:bg-white/10 transition-colors"
               >
-                <div
-                  className={`w-9 h-9 rounded-full flex items-center justify-center shrink-0 ${asset.border ?? ""}`}
-                  style={{ background: asset.bg }}
-                >
-                  <span className={`font-body text-sm font-semibold ${asset.text}`}>{asset.symbol}</span>
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center text-[10px] font-bold text-white`} style={{ background: asset.bg }}>
+                  {asset.ticker[0]}
                 </div>
-                <div>
-                  <div className="font-body text-xs font-semibold text-white">{asset.ticker}</div>
-                  <div className="font-body text-[10px] text-white/35 mt-0.5">{asset.name}</div>
+                <div className="text-left">
+                  <div className="text-xs font-bold text-white leading-none">{asset.ticker}</div>
+                  <div className="text-[10px] text-white/40 leading-none mt-1">{asset.name}</div>
                 </div>
               </motion.div>
             ))}
-          </motion.div>
+          </div>
 
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-            className="mt-12 flex items-center justify-center gap-3"
-          >
-            <div className="w-6 h-px bg-white/15" />
-            <span className="font-body text-[11px] text-white/35">
-              All vaults independently audited
-            </span>
-            <div className="w-6 h-px bg-white/15" />
-          </motion.div>
         </div>
       </section>
 
@@ -737,7 +700,7 @@ export default function Home() {
             style={{ borderTop: "1px solid rgba(255,255,255,0.04)" }}
           >
             <span className="font-body text-xs text-white/25">
-              © 2025 Zenith Protocol. All rights reserved.
+              © 2026 Zenith Protocol. All rights reserved.
             </span>
             <span className="font-body text-xs text-white/25">
               Built on Arbitrum · Powered by Rust

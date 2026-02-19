@@ -41,9 +41,11 @@ body::after {
   .font-display {
     font-family: var(--font-syne), sans-serif;
   }
+
   .font-body {
     font-family: var(--font-jakarta), sans-serif;
   }
+
   .font-code {
     font-family: var(--font-jetbrains), monospace;
   }
@@ -51,16 +53,14 @@ body::after {
 
 /* ── ZENITH animated gradient text ─────────────────────── */
 .zenith-gradient {
-  background: linear-gradient(
-    108deg,
-    #ffffff 0%,
-    #ffffff 22%,
-    #9ed4f8 42%,
-    #ffffff 58%,
-    #ffffff 78%,
-    #fff3b0 92%,
-    #ffffff 100%
-  );
+  background: linear-gradient(108deg,
+      #ffffff 0%,
+      #ffffff 22%,
+      #9ed4f8 42%,
+      #ffffff 58%,
+      #ffffff 78%,
+      #fff3b0 92%,
+      #ffffff 100%);
   background-size: 240% auto;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -72,6 +72,7 @@ body::after {
   from {
     background-position: 0% center;
   }
+
   to {
     background-position: 240% center;
   }
@@ -90,12 +91,10 @@ body::after {
   left: -80%;
   width: 55%;
   height: 100%;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(255, 255, 255, 0.18),
-    transparent
-  );
+  background: linear-gradient(90deg,
+      transparent,
+      rgba(255, 255, 255, 0.18),
+      transparent);
   animation: btn-sweep 4s ease-in-out infinite;
   pointer-events: none;
 }
@@ -104,9 +103,11 @@ body::after {
   0% {
     left: -80%;
   }
+
   40% {
     left: 130%;
   }
+
   100% {
     left: 130%;
   }
@@ -132,12 +133,10 @@ body::after {
   left: 55%;
   width: 900px;
   height: 900px;
-  background: radial-gradient(
-    circle,
-    rgba(40, 160, 240, 0.11) 0%,
-    rgba(40, 160, 240, 0.04) 45%,
-    transparent 70%
-  );
+  background: radial-gradient(circle,
+      rgba(40, 160, 240, 0.11) 0%,
+      rgba(40, 160, 240, 0.04) 45%,
+      transparent 70%);
   transform: translate(-50%, -50%);
   animation: glow-pulse 9s ease-in-out infinite;
   pointer-events: none;
@@ -150,12 +149,10 @@ body::after {
   left: 35%;
   width: 600px;
   height: 600px;
-  background: radial-gradient(
-    circle,
-    rgba(255, 214, 10, 0.07) 0%,
-    rgba(255, 214, 10, 0.02) 45%,
-    transparent 70%
-  );
+  background: radial-gradient(circle,
+      rgba(255, 214, 10, 0.07) 0%,
+      rgba(255, 214, 10, 0.02) 45%,
+      transparent 70%);
   transform: translate(-50%, -50%);
   animation: glow-pulse 13s ease-in-out infinite reverse;
   pointer-events: none;
@@ -164,21 +161,21 @@ body::after {
 
 /* ── Hero dot-grid ──────────────────────────────────────── */
 .hero-grid {
-  background-image: radial-gradient(
-    circle,
-    rgba(255, 255, 255, 0.06) 1px,
-    transparent 1px
-  );
+  background-image: radial-gradient(circle,
+      rgba(255, 255, 255, 0.06) 1px,
+      transparent 1px);
   background-size: 36px 36px;
 }
 
 /* ── Keyframes ──────────────────────────────────────────── */
 @keyframes glow-pulse {
+
   0%,
   100% {
     opacity: 0.5;
     transform: translate(-50%, -50%) scale(1);
   }
+
   50% {
     opacity: 1;
     transform: translate(-50%, -50%) scale(1.18);
@@ -190,11 +187,76 @@ body::after {
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
   }
 }
+
+/* ── Premium Gradient Card (New) ────────────────────────── */
+.premium-gradient-card {
+  position: relative;
+  background: linear-gradient(145deg,
+      rgba(255, 255, 255, 0.03) 0%,
+      rgba(255, 255, 255, 0.005) 100%);
+  border-radius: 16px;
+  /* Smooth rounded corners */
+  padding: 1px;
+  /* Simulate border via padding + background clip content */
+  overflow: hidden;
+  transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.premium-gradient-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 16px;
+  padding: 1px;
+  background: linear-gradient(135deg,
+      rgba(255, 255, 255, 0.08),
+      rgba(255, 255, 255, 0.02) 40%,
+      rgba(255, 255, 255, 0.0) 100%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+.premium-gradient-card:hover {
+  transform: translateY(-4px);
+}
+
+.premium-gradient-card:hover::before {
+  background: linear-gradient(135deg,
+      rgba(255, 255, 255, 0.15),
+      rgba(255, 255, 255, 0.05) 50%,
+      rgba(255, 255, 255, 0.01) 100%);
+}
+
+
+/* ── Ambient Glow Blobs ─────────────────────────────────── */
+.glow-blob {
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  border-radius: 50%;
+  filter: blur(120px);
+  opacity: 0.15;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.glow-blue {
+  background: conic-gradient(from 180deg at 50% 50%, #28A0F0 0deg, #104060 360deg);
+}
+
+.glow-gold {
+  background: conic-gradient(from 0deg at 50% 50%, #FFD60A 0deg, #605010 360deg);
+}
+
 
 .animate-fade-up {
   animation: fade-up 0.7s ease forwards;
