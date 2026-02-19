@@ -1,26 +1,201 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #0a0a0b;
+  --foreground: #ffffff;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --font-sans: var(--font-jakarta);
+  --font-mono: var(--font-jetbrains);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-jakarta), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ── Noise grain overlay (premium feel) ─────────────────── */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.028;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 180px 180px;
+}
+
+/* ── Font utilities ─────────────────────────────────────── */
+/* font-display  → Syne Bold          (headings)            */
+/* font-body     → Plus Jakarta Sans  (body / numbers)      */
+/* font-code     → JetBrains Mono     (small accents)       */
+@layer utilities {
+  .font-display {
+    font-family: var(--font-syne), sans-serif;
+  }
+  .font-body {
+    font-family: var(--font-jakarta), sans-serif;
+  }
+  .font-code {
+    font-family: var(--font-jetbrains), monospace;
+  }
+}
+
+/* ── ZENITH animated gradient text ─────────────────────── */
+.zenith-gradient {
+  background: linear-gradient(
+    108deg,
+    #ffffff 0%,
+    #ffffff 22%,
+    #9ed4f8 42%,
+    #ffffff 58%,
+    #ffffff 78%,
+    #fff3b0 92%,
+    #ffffff 100%
+  );
+  background-size: 240% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: zenith-shimmer 7s linear infinite;
+}
+
+@keyframes zenith-shimmer {
+  from {
+    background-position: 0% center;
+  }
+  to {
+    background-position: 240% center;
+  }
+}
+
+/* ── Shimmer sweep on primary buttons ───────────────────── */
+.btn-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-shimmer::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -80%;
+  width: 55%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.18),
+    transparent
+  );
+  animation: btn-sweep 4s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes btn-sweep {
+  0% {
+    left: -80%;
+  }
+  40% {
+    left: 130%;
+  }
+  100% {
+    left: 130%;
+  }
+}
+
+/* ── Glassmorphism card ─────────────────────────────────── */
+.glass-card {
+  background: rgba(255, 255, 255, 0.028);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.glass-card:hover {
+  border-color: rgba(255, 255, 255, 0.13);
+}
+
+/* ── Hero glow orbs ─────────────────────────────────────── */
+.hero-glow {
+  position: absolute;
+  top: 40%;
+  left: 55%;
+  width: 900px;
+  height: 900px;
+  background: radial-gradient(
+    circle,
+    rgba(40, 160, 240, 0.11) 0%,
+    rgba(40, 160, 240, 0.04) 45%,
+    transparent 70%
+  );
+  transform: translate(-50%, -50%);
+  animation: glow-pulse 9s ease-in-out infinite;
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+
+.hero-glow-secondary {
+  position: absolute;
+  top: 65%;
+  left: 35%;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(
+    circle,
+    rgba(255, 214, 10, 0.07) 0%,
+    rgba(255, 214, 10, 0.02) 45%,
+    transparent 70%
+  );
+  transform: translate(-50%, -50%);
+  animation: glow-pulse 13s ease-in-out infinite reverse;
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+
+/* ── Hero dot-grid ──────────────────────────────────────── */
+.hero-grid {
+  background-image: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.06) 1px,
+    transparent 1px
+  );
+  background-size: 36px 36px;
+}
+
+/* ── Keyframes ──────────────────────────────────────────── */
+@keyframes glow-pulse {
+  0%,
+  100% {
+    opacity: 0.5;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.18);
+  }
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-up {
+  animation: fade-up 0.7s ease forwards;
 }

@@ -1,65 +1,746 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import dynamic from "next/dynamic";
+import { useRef, useEffect, useState } from "react";
+import {
+  motion,
+  AnimatePresence,
+  useInView,
+  useMotionValue,
+  animate,
+} from "framer-motion";
+
+// Three.js scene — SSR disabled (browser-only)
+const HeroScene = dynamic(() => import("@/components/HeroScene"), {
+  ssr: false,
+  loading: () => <div className="w-full h-full" />,
+});
+
+// ── Animation variants ─────────────────────────────────────
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const fadeUp: any = {
+  hidden: { opacity: 0, y: 32 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.75, ease: [0.16, 1, 0.3, 1] },
+  },
+};
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const stagger: any = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.11 } },
+};
+
+// ── Counter that animates when scrolled into view ──────────
+function StatCounter({
+  value,
+  prefix = "",
+  suffix = "",
+  decimals = 0,
+}: {
+  value: number;
+  prefix?: string;
+  suffix?: string;
+  decimals?: number;
+}) {
+  const ref = useRef<HTMLSpanElement>(null);
+  const inView = useInView(ref, { once: true, margin: "-60px" });
+  const mv = useMotionValue(0);
+  const [display, setDisplay] = useState("0");
+
+  useEffect(() => {
+    if (!inView) return;
+    const ctrl = animate(mv, value, {
+      duration: 2.4,
+      ease: "easeOut",
+      onUpdate(v) {
+        setDisplay(v.toFixed(decimals));
+      },
+    });
+    return () => ctrl.stop();
+  }, [inView, value, decimals, mv]);
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
+    <span ref={ref}>
+      {prefix}
+      {display}
+      {suffix}
+    </span>
+  );
+}
+
+// ── SVG Icons ──────────────────────────────────────────────
+function IconVault() {
+  return (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="3" y="3" width="18" height="18" rx="2" />
+      <circle cx="12" cy="12" r="3.5" />
+      <path d="M12 8.5V7M12 17v-1.5M7 12H5.5M18.5 12H17" />
+      <path d="M9.17 9.17L8.1 8.1M15.9 15.9l-1.07-1.07M14.83 9.17l1.07-1.07M8.1 15.9l1.07-1.07" />
+    </svg>
+  );
+}
+
+function IconRust() {
+  return (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+    </svg>
+  );
+}
+
+function IconMultiAsset() {
+  return (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="8.5" cy="7.5" r="4" />
+      <circle cx="15.5" cy="7.5" r="4" />
+      <circle cx="12" cy="15.5" r="4" />
+    </svg>
+  );
+}
+
+function IconDashboard() {
+  return (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="3" y="3" width="7" height="7" rx="1" />
+      <rect x="14" y="3" width="7" height="7" rx="1" />
+      <rect x="14" y="14" width="7" height="7" rx="1" />
+      <rect x="3" y="14" width="7" height="7" rx="1" />
+    </svg>
+  );
+}
+
+function IconDeposit() {
+  return (
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M12 3v13M6 10l6 6 6-6" />
+      <path d="M4 20h16" />
+    </svg>
+  );
+}
+
+// Fixed: was identical to IconDashboard before
+function IconAllocation() {
+  return (
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M3 3h7v3H3zM14 3h7v5h-7zM14 12h7v9h-7zM3 10h7v12H3z" />
+    </svg>
+  );
+}
+
+function IconRebalance() {
+  return (
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M21 12a9 9 0 0 1-9 9m9-9a9 9 0 0 0-9-9m9 9H3m9 9a9 9 0 0 1-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9" />
+    </svg>
+  );
+}
+
+function IconArrow() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M5 12h14M13 6l6 6-6 6" />
+    </svg>
+  );
+}
+
+function IconMenu() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
+      <path d="M4 6h16M4 12h16M4 18h16" />
+    </svg>
+  );
+}
+
+function IconClose() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
+      <path d="M18 6L6 18M6 6l12 12" />
+    </svg>
+  );
+}
+
+// ── Main page ──────────────────────────────────────────────
+export default function Home() {
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  return (
+    <main className="min-h-screen bg-[#0A0A0B] text-white overflow-x-hidden">
+
+      {/* ══ NAVBAR ══════════════════════════════════════════ */}
+      <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 md:px-14 py-4 border-b border-white/[0.05] bg-[#0A0A0B]/80 backdrop-blur-md">
+        <div className="font-display text-lg font-bold tracking-[0.32em] text-white">
+          ZENITH
+        </div>
+
+        {/* Desktop links */}
+        <div className="hidden md:flex items-center gap-9">
+          {["Docs", "GitHub", "Twitter"].map((link) => (
+            <a key={link} href="#" className="font-code text-[11px] text-white/38 hover:text-white/80 transition-colors tracking-[0.18em] uppercase">
+              {link}
+            </a>
+          ))}
+        </div>
+
+        <div className="flex items-center gap-3">
+          <button className="btn-shimmer px-5 py-2.5 bg-[#28A0F0] text-white font-body font-semibold text-xs tracking-[0.18em] uppercase transition-all duration-200 hover:bg-[#28A0F0]/88 hover:shadow-[0_0_28px_rgba(40,160,240,0.5)]">
+            Launch App
+          </button>
+          {/* Mobile hamburger */}
+          <button
+            className="md:hidden p-2 text-white/60 hover:text-white transition-colors"
+            onClick={() => setMenuOpen((v) => !v)}
+            aria-label="Toggle menu"
+          >
+            {menuOpen ? <IconClose /> : <IconMenu />}
+          </button>
+        </div>
+      </nav>
+
+      {/* ══ MOBILE MENU ══════════════════════════════════════ */}
+      <AnimatePresence>
+        {menuOpen && (
+          <motion.div
+            key="mobile-menu"
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.22 }}
+            className="fixed top-[61px] left-0 right-0 z-40 border-b border-white/[0.06] bg-[#0A0A0B]/95 backdrop-blur-xl px-6 py-6 flex flex-col gap-5"
+          >
+            {["Docs", "GitHub", "Twitter"].map((link) => (
+              <a
+                key={link}
+                href="#"
+                onClick={() => setMenuOpen(false)}
+                className="font-code text-sm text-white/50 hover:text-white transition-colors tracking-[0.2em] uppercase"
+              >
+                {link}
+              </a>
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* ══ HERO — split layout ══════════════════════════════ */}
+      <section className="relative min-h-screen flex items-center px-6 md:px-14 pt-20 pb-10 overflow-hidden">
+
+        {/* Background glows */}
+        <div className="hero-glow" aria-hidden="true" />
+        <div className="hero-glow-secondary" aria-hidden="true" />
+        <div className="absolute inset-0 hero-grid opacity-[0.28]" aria-hidden="true" />
+
+        {/* Edge vignette */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{ background: "radial-gradient(ellipse 90% 80% at 50% 50%, transparent 35%, #0A0A0B 100%)" }}
+          aria-hidden="true"
         />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+
+        <div className="relative z-10 w-full max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-6">
+
+          {/* ── LEFT: text ──────────────────────────────── */}
+          <motion.div
+            className="flex flex-col items-start max-w-2xl"
+            variants={stagger}
+            initial="hidden"
+            animate="visible"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
+            {/* Badge */}
+            <motion.div variants={fadeUp} className="flex items-center gap-2 mb-8 px-3.5 py-1.5 border border-[#28A0F0]/25 bg-[#28A0F0]/[0.07]">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#28A0F0] animate-pulse" />
+              <span className="font-code text-[10px] text-[#28A0F0] tracking-[0.4em] uppercase">
+                Powered by Arbitrum · Stylus + Rust
+              </span>
+            </motion.div>
+
+            {/* Heading */}
+            <motion.h1
+              variants={fadeUp}
+              className="zenith-gradient font-display font-bold leading-none mb-5"
+              style={{ fontSize: "clamp(4.5rem, 11vw, 9rem)", letterSpacing: "0.15em" }}
+            >
+              ZENITH
+            </motion.h1>
+
+            {/* Tagline — now in body font */}
+            <motion.p
+              variants={fadeUp}
+              className="font-body text-xl md:text-2xl text-white/60 font-medium mb-4 leading-snug max-w-lg"
+            >
+              The High-Performance Yield Layer
+              <br />
+              <span className="text-white/40 text-lg md:text-xl font-normal">for Real-World Assets on Arbitrum</span>
+            </motion.p>
+
+            {/* Description */}
+            <motion.p variants={fadeUp} className="font-body text-sm text-white/30 max-w-md leading-relaxed mb-10">
+              Institutional-grade RWA yield aggregator. Your stablecoins are automatically
+              routed to the highest-yielding tokenized assets — T-Bills, Gold, Credit —
+              at Rust-speed with extreme gas efficiency.
+            </motion.p>
+
+            {/* CTAs */}
+            <motion.div variants={fadeUp} className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
+              <motion.button
+                whileHover={{ y: -2, boxShadow: "0 0 52px rgba(40,160,240,0.55)" }}
+                whileTap={{ scale: 0.97 }}
+                transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                className="btn-shimmer group flex items-center gap-2.5 px-9 py-4 bg-[#28A0F0] text-white font-body font-semibold text-sm tracking-[0.16em] uppercase"
+              >
+                Launch App
+                <span className="group-hover:translate-x-1 transition-transform duration-200">
+                  <IconArrow />
+                </span>
+              </motion.button>
+
+              <motion.button
+                whileHover={{ y: -2 }}
+                whileTap={{ scale: 0.97 }}
+                transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                className="flex items-center gap-2.5 px-9 py-4 border border-white/10 hover:border-white/22 text-white/45 hover:text-white/75 font-body font-medium text-sm tracking-[0.16em] uppercase transition-colors duration-200"
+              >
+                Read Docs
+              </motion.button>
+            </motion.div>
+
+            {/* Trust line */}
+            <motion.div variants={fadeUp} className="mt-10 flex items-center gap-3 opacity-35">
+              <div className="w-6 h-px bg-white/30" />
+              <span className="font-code text-[9px] text-white/40 tracking-[0.3em] uppercase">
+                Audited · Non-custodial · On-chain
+              </span>
+            </motion.div>
+          </motion.div>
+
+          {/* ── RIGHT: 3D scene ──────────────────────────── */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1], delay: 0.3 }}
+            className="w-full max-w-[460px] lg:max-w-[540px] aspect-square shrink-0"
+          >
+            <HeroScene />
+          </motion.div>
+        </div>
+
+        {/* Scroll hint */}
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-20 pointer-events-none">
+          <span className="font-code text-[9px] tracking-[0.4em] text-white/50 uppercase">Scroll</span>
+          <div className="w-px h-10 bg-gradient-to-b from-white/40 to-transparent" />
+        </div>
+      </section>
+
+      {/* ══ STATS BAR ══════════════════════════════════════ */}
+      <section className="border-y border-white/[0.05] bg-white/[0.014]">
+        <motion.div
+          variants={stagger}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-60px" }}
+          className="max-w-5xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-white/[0.05]"
+        >
+          <motion.div variants={fadeUp} className="flex flex-col items-center text-center py-10 md:py-12 px-8">
+            <span className="font-code text-[10px] text-white/25 tracking-[0.35em] uppercase mb-4">
+              Total Value Locked
+            </span>
+            <span className="font-display text-[2.7rem] font-bold text-white tracking-wide leading-none">
+              $<StatCounter value={2.4} decimals={1} suffix="B+" />
+            </span>
+            <span className="font-code text-[10px] text-white/22 tracking-wider mt-2">
+              Across all vaults
+            </span>
+          </motion.div>
+
+          <motion.div variants={fadeUp} className="flex flex-col items-center text-center py-10 md:py-12 px-8">
+            <span className="font-code text-[10px] text-white/25 tracking-[0.35em] uppercase mb-4">
+              Average APY
+            </span>
+            <span className="font-display text-[2.7rem] font-bold text-[#FFD60A] tracking-wide leading-none">
+              <StatCounter value={12.8} decimals={1} suffix="%" />
+            </span>
+            <span className="font-code text-[10px] text-white/22 tracking-wider mt-2">
+              30-day trailing average
+            </span>
+          </motion.div>
+
+          <motion.div variants={fadeUp} className="flex flex-col items-center text-center py-10 md:py-12 px-8">
+            <span className="font-code text-[10px] text-white/25 tracking-[0.35em] uppercase mb-4">
+              Gas Saved vs Competitors
+            </span>
+            <span className="font-display text-[2.7rem] font-bold text-white tracking-wide leading-none">
+              <StatCounter value={94} suffix="%" />
+            </span>
+            <span className="font-code text-[10px] text-white/22 tracking-wider mt-2">
+              Arbitrum Stylus efficiency
+            </span>
+          </motion.div>
+        </motion.div>
+      </section>
+
+      {/* ══ HOW IT WORKS ════════════════════════════════════ */}
+      <section className="py-32 px-6">
+        <div className="max-w-5xl mx-auto">
+
+          <motion.div
+            variants={stagger}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-80px" }}
+            className="text-center mb-24"
+          >
+            <motion.span variants={fadeUp} className="font-code text-[10px] text-[#28A0F0] tracking-[0.45em] uppercase block mb-4">
+              Process
+            </motion.span>
+            <motion.h2 variants={fadeUp} className="font-display text-3xl md:text-4xl font-bold tracking-[0.12em] text-white">
+              HOW IT WORKS
+            </motion.h2>
+          </motion.div>
+
+          <motion.div
+            variants={stagger}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-60px" }}
+            className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-6 relative"
+          >
+            {/* Connector — properly centered between the three icon circles */}
+            <div
+              className="hidden md:block absolute top-[3.2rem] h-px"
+              style={{
+                left: "calc(16.67% + 52px)",
+                right: "calc(16.67% + 52px)",
+                background: "linear-gradient(90deg, rgba(40,160,240,0.4), rgba(255,214,10,0.4), rgba(40,160,240,0.4))",
+              }}
+              aria-hidden="true"
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+
+            {[
+              {
+                icon: <IconDeposit />,
+                num: "01",
+                numBg: "#28A0F0",
+                numColor: "text-white",
+                title: "Deposit Stablecoin",
+                desc: "Deposit USDC or USDT into Zenith vaults. Receive zTokens that accrue yield in real-time from every RWA position.",
+              },
+              {
+                icon: <IconAllocation />,
+                num: "02",
+                numBg: "#FFD60A",
+                numColor: "text-[#0A0A0B]",
+                title: "Smart Allocation",
+                desc: "Our Rust engine on Arbitrum Stylus evaluates yield and risk across T-Bills, Gold, and Credit in real-time — routing capital to the optimal mix.",
+              },
+              {
+                icon: <IconRebalance />,
+                num: "03",
+                numBg: "#28A0F0",
+                numColor: "text-white",
+                title: "Auto Rebalancing",
+                desc: "When yields shift, Zenith rebalances automatically. No manual effort. 94% cheaper than competitors.",
+              },
+            ].map((step) => (
+              <motion.div
+                key={step.num}
+                variants={fadeUp}
+                className="flex flex-col items-center text-center"
+              >
+                <div className="relative mb-7">
+                  <div className="w-[6.5rem] h-[6.5rem] rounded-full border border-white/[0.08] bg-white/[0.022] flex items-center justify-center text-white/65">
+                    {step.icon}
+                  </div>
+                  <div
+                    className="absolute -top-1.5 -right-1.5 w-6 h-6 flex items-center justify-center"
+                    style={{ background: step.numBg }}
+                  >
+                    <span className={`font-code text-[9px] font-bold ${step.numColor}`}>{step.num}</span>
+                  </div>
+                </div>
+                <h3 className="font-display text-sm font-bold tracking-[0.14em] text-white mb-3 uppercase">
+                  {step.title}
+                </h3>
+                <p className="font-body text-xs text-white/35 leading-loose max-w-[15rem]">
+                  {step.desc}
+                </p>
+              </motion.div>
+            ))}
+          </motion.div>
         </div>
-      </main>
-    </div>
+      </section>
+
+      {/* ══ FEATURES ════════════════════════════════════════ */}
+      <section className="py-32 px-6" style={{ background: "rgba(255,255,255,0.012)" }}>
+        <div className="max-w-5xl mx-auto">
+
+          <motion.div
+            variants={stagger}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-80px" }}
+            className="text-center mb-20"
+          >
+            <motion.span variants={fadeUp} className="font-code text-[10px] text-[#28A0F0] tracking-[0.45em] uppercase block mb-4">
+              Infrastructure
+            </motion.span>
+            <motion.h2 variants={fadeUp} className="font-display text-3xl md:text-4xl font-bold tracking-[0.12em] text-white">
+              BUILT FOR INSTITUTIONS
+            </motion.h2>
+          </motion.div>
+
+          <motion.div
+            variants={stagger}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-60px" }}
+            className="grid grid-cols-1 md:grid-cols-2 gap-4"
+          >
+            {[
+              {
+                icon: <IconVault />,
+                iconColor: "#28A0F0",
+                title: "Smart RWA Vaults",
+                desc: "Non-custodial, diversified exposure to tokenized T-Bills, institutional gold, and premium yield instruments — from a single unified vault position.",
+              },
+              {
+                icon: <IconRust />,
+                iconColor: "#FFD60A",
+                title: "Rust-Powered Engine",
+                desc: "Sub-millisecond execution via Arbitrum Stylus. Enterprise-grade reliability with zero runtime overhead, 10× faster and 50× cheaper than EVM-only alternatives.",
+              },
+              {
+                icon: <IconMultiAsset />,
+                iconColor: "#FFD60A",
+                title: "Multi-Asset Exposure",
+                desc: "Access 10+ real-world asset classes through a single interface — stablecoins, precious metals, government securities, and tokenized credit.",
+              },
+              {
+                icon: <IconDashboard />,
+                iconColor: "#28A0F0",
+                title: "Real-Time Dashboard",
+                desc: "Institutional analytics with live P&L tracking, yield attribution, and risk exposure breakdowns — powered by Chainlink feeds, updated every block.",
+              },
+            ].map((card) => {
+              const isBlue = card.iconColor === "#28A0F0";
+              return (
+                <motion.div
+                  key={card.title}
+                  variants={fadeUp}
+                  whileHover={{ y: -4 }}
+                  transition={{ type: "spring", stiffness: 300, damping: 22 }}
+                  className="glass-card p-8 group cursor-default"
+                  style={{
+                    transition: "border-color 0.3s, box-shadow 0.3s",
+                  }}
+                  onMouseEnter={(e) => {
+                    (e.currentTarget as HTMLElement).style.borderColor = isBlue
+                      ? "rgba(40,160,240,0.25)"
+                      : "rgba(255,214,10,0.2)";
+                    (e.currentTarget as HTMLElement).style.boxShadow = isBlue
+                      ? "0 8px 48px rgba(40,160,240,0.08)"
+                      : "0 8px 48px rgba(255,214,10,0.06)";
+                  }}
+                  onMouseLeave={(e) => {
+                    (e.currentTarget as HTMLElement).style.borderColor = "";
+                    (e.currentTarget as HTMLElement).style.boxShadow = "";
+                  }}
+                >
+                  <div
+                    className="w-11 h-11 flex items-center justify-center mb-7 transition-all duration-300"
+                    style={{
+                      border: `1px solid ${card.iconColor}30`,
+                      background: `${card.iconColor}0d`,
+                      color: card.iconColor,
+                    }}
+                  >
+                    {card.icon}
+                  </div>
+                  <h3 className="font-display text-sm font-bold tracking-[0.13em] text-white mb-3 uppercase">
+                    {card.title}
+                  </h3>
+                  <p className="font-body text-sm text-white/36 leading-relaxed">
+                    {card.desc}
+                  </p>
+                </motion.div>
+              );
+            })}
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ══ SUPPORTED ASSETS ════════════════════════════════ */}
+      <section className="py-32 px-6">
+        <div className="max-w-5xl mx-auto">
+
+          <motion.div
+            variants={stagger}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-80px" }}
+            className="text-center mb-16"
+          >
+            <motion.span variants={fadeUp} className="font-code text-[10px] text-[#28A0F0] tracking-[0.45em] uppercase block mb-4">
+              Ecosystem
+            </motion.span>
+            <motion.h2 variants={fadeUp} className="font-display text-3xl md:text-4xl font-bold tracking-[0.12em] text-white mb-4">
+              SUPPORTED ASSETS
+            </motion.h2>
+            <motion.p variants={fadeUp} className="font-body text-sm text-white/28 tracking-wide">
+              Deposit once. Earn across the entire real-world asset landscape.
+            </motion.p>
+          </motion.div>
+
+          <motion.div
+            variants={stagger}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-60px" }}
+            className="flex flex-wrap items-center justify-center gap-3"
+          >
+            {[
+              { ticker: "USDC", name: "USD Coin", symbol: "$", bg: "#2775CA", text: "text-white" },
+              { ticker: "USDT", name: "Tether USD", symbol: "₮", bg: "#26A17B", text: "text-white" },
+              { ticker: "ONDO", name: "Ondo Finance", symbol: "O", bg: "rgba(255,255,255,0.06)", text: "text-white", border: "border border-white/12" },
+              { ticker: "PAXG", name: "Pax Gold", symbol: "Au", bg: "rgba(255,214,10,0.12)", text: "text-[#FFD60A]", border: "border border-[#FFD60A]/30" },
+              { ticker: "T-BILLS", name: "US Treasuries", symbol: "T", bg: "rgba(255,255,255,0.06)", text: "text-white", border: "border border-white/12" },
+            ].map((asset) => (
+              <motion.div
+                key={asset.ticker}
+                variants={fadeUp}
+                whileHover={{ y: -3, borderColor: "rgba(255,255,255,0.18)" }}
+                transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                className="glass-card flex items-center gap-3.5 px-5 py-3.5 cursor-default"
+              >
+                <div
+                  className={`w-9 h-9 rounded-full flex items-center justify-center shrink-0 ${asset.border ?? ""}`}
+                  style={{ background: asset.bg }}
+                >
+                  <span className={`font-display text-sm font-bold ${asset.text}`}>{asset.symbol}</span>
+                </div>
+                <div>
+                  <div className="font-display text-xs font-bold tracking-[0.1em] text-white">{asset.ticker}</div>
+                  <div className="font-code text-[9px] text-white/26 mt-0.5">{asset.name}</div>
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+            className="mt-12 flex items-center justify-center gap-3"
+          >
+            <div className="w-6 h-px bg-white/15" />
+            <span className="font-code text-[9px] text-white/28 tracking-[0.3em] uppercase">
+              All vaults independently audited
+            </span>
+            <div className="w-6 h-px bg-white/15" />
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ══ CTA BAND ════════════════════════════════════════ */}
+      <section
+        className="relative py-28 px-6 overflow-hidden"
+        style={{
+          borderTop: "1px solid rgba(255,255,255,0.05)",
+          borderBottom: "1px solid rgba(255,255,255,0.05)",
+        }}
+      >
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background:
+              "radial-gradient(ellipse 75% 90% at 50% 50%, rgba(40,160,240,0.07) 0%, transparent 70%)",
+          }}
+          aria-hidden="true"
+        />
+        <motion.div
+          variants={stagger}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-80px" }}
+          className="relative z-10 max-w-xl mx-auto text-center"
+        >
+          <motion.h2
+            variants={fadeUp}
+            className="font-display text-4xl md:text-[3rem] font-bold tracking-[0.08em] text-white mb-2 leading-none"
+          >
+            START EARNING ON
+          </motion.h2>
+          <motion.h2
+            variants={fadeUp}
+            className="font-display text-4xl md:text-[3rem] font-bold tracking-[0.08em] mb-8 leading-none"
+            style={{ color: "#FFD60A" }}
+          >
+            REAL-WORLD ASSETS
+          </motion.h2>
+          <motion.p variants={fadeUp} className="font-body text-sm text-white/30 leading-relaxed mb-10 max-w-sm mx-auto">
+            Join institutional capital already deployed across Zenith vaults.
+            No lock-ups. Full on-chain transparency.
+          </motion.p>
+          <motion.button
+            variants={fadeUp}
+            whileHover={{ y: -3, boxShadow: "0 0 64px rgba(40,160,240,0.6)" }}
+            whileTap={{ scale: 0.97 }}
+            transition={{ type: "spring", stiffness: 400, damping: 25 }}
+            className="btn-shimmer group flex items-center gap-2.5 px-12 py-4 bg-[#28A0F0] text-white font-body font-semibold text-sm tracking-[0.2em] uppercase mx-auto"
+          >
+            Launch App
+            <span className="group-hover:translate-x-1 transition-transform duration-200">
+              <IconArrow />
+            </span>
+          </motion.button>
+        </motion.div>
+      </section>
+
+      {/* ══ FOOTER ══════════════════════════════════════════ */}
+      <footer
+        className="py-14 px-6"
+        style={{ borderTop: "1px solid rgba(255,255,255,0.04)" }}
+      >
+        <div className="max-w-5xl mx-auto">
+          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-10 mb-10">
+            <div>
+              <div className="font-display text-xl font-bold tracking-[0.32em] text-white mb-1.5">
+                ZENITH
+              </div>
+              <div className="font-code text-[10px] text-white/22 tracking-[0.1em]">
+                The High-Performance Yield Layer for Real-World Assets on Arbitrum
+              </div>
+            </div>
+
+            <nav className="flex items-center gap-8" aria-label="Footer navigation">
+              {["Docs", "GitHub", "Twitter / X"].map((link) => (
+                <a
+                  key={link}
+                  href="#"
+                  className="font-code text-[11px] text-white/30 hover:text-white/65 transition-colors tracking-[0.18em] uppercase"
+                >
+                  {link}
+                </a>
+              ))}
+            </nav>
+          </div>
+
+          <div
+            className="pt-7 flex flex-col md:flex-row items-center justify-between gap-3"
+            style={{ borderTop: "1px solid rgba(255,255,255,0.04)" }}
+          >
+            <span className="font-code text-[10px] text-white/16 tracking-[0.2em] uppercase">
+              © 2024 Zenith Protocol. All rights reserved.
+            </span>
+            <span className="font-code text-[10px] text-white/16 tracking-[0.2em] uppercase">
+              Built on Arbitrum · Powered by Rust
+            </span>
+          </div>
+        </div>
+      </footer>
+
+    </main>
   );
 }
