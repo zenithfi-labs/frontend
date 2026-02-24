@@ -6,10 +6,55 @@ import { IconBolt, IconLock } from "@/components/icons";
 import Sparkline from "@/components/ui/Sparkline";
 import AnimatedBar from "@/components/ui/AnimatedBar";
 import { TOKEN_BADGES } from "@/data/constants";
+import { useRef, useState } from "react";
+
+// Futuristic Spotlight Card Wrapper
+function FeatureCard({ children, className = "" }: { children: React.ReactNode, className?: string }) {
+    const divRef = useRef<HTMLDivElement>(null);
+    const [position, setPosition] = useState({ x: 0, y: 0 });
+    const [opacity, setOpacity] = useState(0);
+
+    const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+        if (!divRef.current) return;
+        const rect = divRef.current.getBoundingClientRect();
+        setPosition({ x: e.clientX - rect.left, y: e.clientY - rect.top });
+    };
+
+    return (
+        <motion.div variants={fadeUp} className={`flex flex-col h-full ${className}`}>
+            <div
+                ref={divRef}
+                onMouseMove={handleMouseMove}
+                onMouseEnter={() => setOpacity(1)}
+                onMouseLeave={() => setOpacity(0)}
+                className="group relative h-full rounded-[24px] border border-white/[0.08] bg-white/[0.01] backdrop-blur-md overflow-hidden transition-colors duration-500 hover:border-white/[0.15] hover:bg-white/[0.03]"
+            >
+                {/* Mouse Spotlight Glow */}
+                <div
+                    className="pointer-events-none absolute -inset-px z-0 transition-opacity duration-300"
+                    style={{
+                        opacity,
+                        background: `radial-gradient(800px circle at ${position.x}px ${position.y}px, rgba(40,160,240,0.08), transparent 40%)`,
+                    }}
+                />
+                {/* Top edge inner highlight for glass effect */}
+                <div className="pointer-events-none absolute inset-0 z-0 bg-gradient-to-b from-white/[0.05] to-transparent opacity-50" />
+
+                <div className="relative z-10 h-full flex flex-col">
+                    {children}
+                </div>
+            </div>
+        </motion.div>
+    );
+}
 
 export default function Features() {
     return (
-        <section className="relative py-32 px-6 bg-[#050505]">
+        <section className="relative py-32 px-6 bg-black overflow-hidden">
+            {/* Ambient Background Glows */}
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-[#28A0F0] opacity-[0.15] blur-[120px] pointer-events-none rounded-full mix-blend-screen" />
+            <div className="absolute bottom-0 right-0 w-[600px] h-[600px] bg-[#FFD60A] opacity-[0.08] blur-[150px] pointer-events-none rounded-full mix-blend-screen" />
+
             <div className="max-w-6xl mx-auto relative z-10">
                 {/* Section Header */}
                 <motion.div
@@ -17,14 +62,14 @@ export default function Features() {
                     initial="hidden"
                     whileInView="visible"
                     viewport={{ once: true, margin: "-80px" }}
-                    className="text-center mb-16"
+                    className="text-center mb-20"
                 >
                     <motion.div
                         variants={fadeUp}
-                        className="inline-flex items-center justify-center px-4 py-1.5 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm mb-6"
+                        className="inline-flex items-center justify-center px-4 py-1.5 rounded-full border border-white/10 bg-white/5 backdrop-blur-md mb-6 shadow-[0_0_30px_rgba(40,160,240,0.15)]"
                     >
-                        <span className="w-1.5 h-1.5 rounded-full bg-[#28A0F0] mr-2 animate-pulse" />
-                        <span className="font-body text-[11px] font-semibold tracking-wider text-white/70 uppercase">
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#28A0F0] mr-2 animate-pulse shadow-[0_0_10px_#28A0F0]" />
+                        <span className="font-body text-[11px] font-semibold tracking-wider text-white/80 uppercase">
                             Why Zenith
                         </span>
                     </motion.div>
@@ -33,7 +78,7 @@ export default function Features() {
                         className="font-body text-4xl md:text-5xl font-bold tracking-tight text-white mb-5"
                     >
                         Built Different.<br />
-                        <span className="text-white/40">Performs Different.</span>
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-white/40 to-white/10">Performs Different.</span>
                     </motion.h2>
                 </motion.div>
 
@@ -43,146 +88,138 @@ export default function Features() {
                     initial="hidden"
                     whileInView="visible"
                     viewport={{ once: true, margin: "-60px" }}
-                    className="grid grid-cols-1 md:grid-cols-3 gap-4"
+                    className="grid grid-cols-1 md:grid-cols-3 gap-5"
                 >
-                    {/* ── HERO CARD: Rust Engine (spans 2 cols, 2 rows) ── */}
-                    <motion.div
-                        variants={fadeUp}
-                        className="md:col-span-2 md:row-span-2 group relative rounded-2xl border border-white/[0.07] bg-gradient-to-br from-white/[0.04] to-white/[0.01] overflow-hidden"
-                    >
+                    {/* ── HERO CARD: Rust Engine ── */}
+                    <FeatureCard className="md:col-span-2 md:row-span-2">
                         {/* Grid pattern background */}
                         <div
-                            className="absolute inset-0 opacity-[0.08]"
+                            className="absolute inset-0 opacity-[0.1]"
                             style={{
                                 backgroundImage:
-                                    "linear-gradient(#444 1px, transparent 1px), linear-gradient(90deg, #444 1px, transparent 1px)",
+                                    "linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px)",
                                 backgroundSize: "32px 32px",
+                                maskImage: "radial-gradient(ellipse at center, black 40%, transparent 80%)",
+                                WebkitMaskImage: "radial-gradient(ellipse at center, black 40%, transparent 80%)"
                             }}
                         />
-                        {/* Blue glow */}
-                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-72 h-72 rounded-full bg-[#28A0F0] blur-[120px] opacity-[0.08] group-hover:opacity-[0.14] transition-opacity duration-700" />
+                        {/* Blue glow core */}
+                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 rounded-full bg-[#28A0F0] blur-[100px] opacity-[0.15] group-hover:opacity-[0.25] transition-opacity duration-700" />
 
-                        <div className="relative z-10 p-8 md:p-10 flex flex-col justify-between h-full min-h-[360px]">
+                        <div className="relative p-8 md:p-10 flex flex-col justify-between h-full min-h-[380px]">
                             <div>
-                                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#28A0F0]/10 border border-[#28A0F0]/20 mb-6">
+                                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#28A0F0]/10 border border-[#28A0F0]/30 mb-6 shadow-[0_0_20px_rgba(40,160,240,0.1)]">
                                     <span className="text-[#28A0F0]"><IconBolt /></span>
-                                    <span className="font-code text-[10px] text-[#28A0F0] uppercase tracking-wider">Arbitrum Stylus</span>
+                                    <span className="font-code text-[10px] text-[#28A0F0] uppercase tracking-wider font-semibold">Arbitrum Stylus</span>
                                 </div>
-                                <h3 className="font-body text-2xl md:text-3xl font-bold text-white mb-3 leading-tight">
+                                <h3 className="font-body text-3xl md:text-4xl font-bold text-white mb-4 leading-tight">
                                     Rust-Powered Engine.<br />
-                                    <span className="text-white/50">10x Faster Than EVM.</span>
+                                    <span className="text-white/40">10x Faster Than EVM.</span>
                                 </h3>
-                                <p className="font-body text-sm text-white/40 max-w-md leading-relaxed">
+                                <p className="font-body text-[15px] text-white/50 max-w-md leading-relaxed">
                                     Smart contracts compiled to WASM via Rust — executing yield strategies
-                                    at native speed with 94% gas savings on Arbitrum Stylus.
+                                    at native speed with 94% gas savings on Arbitrum.
                                 </p>
                             </div>
 
                             {/* Execution speed metrics */}
-                            <div className="mt-8 space-y-4">
-                                <div className="flex items-center justify-between">
-                                    <span className="font-code text-[10px] text-white/40 uppercase tracking-wider">Zenith (Rust/WASM)</span>
-                                    <span className="font-code text-[11px] text-[#28A0F0]">0.4ms</span>
+                            <div className="mt-10 space-y-5 lg:pl-4 lg:border-l lg:border-white/10">
+                                <div>
+                                    <div className="flex items-center justify-between mb-2">
+                                        <span className="font-code text-[11px] text-white/50 uppercase tracking-widest font-medium">Zenith (Rust)</span>
+                                        <span className="font-code text-xs text-[#28A0F0] font-bold drop-shadow-[0_0_8px_rgba(40,160,240,0.5)]">0.4ms</span>
+                                    </div>
+                                    <AnimatedBar percent={95} color="#28A0F0" />
                                 </div>
-                                <AnimatedBar percent={95} color="#28A0F0" />
-                                <div className="flex items-center justify-between mt-3">
-                                    <span className="font-code text-[10px] text-white/40 uppercase tracking-wider">Traditional EVM</span>
-                                    <span className="font-code text-[11px] text-white/30">4.2ms</span>
+                                <div>
+                                    <div className="flex items-center justify-between mb-2 mt-4">
+                                        <span className="font-code text-[11px] text-white/40 uppercase tracking-widest font-medium">Standard EVM</span>
+                                        <span className="font-code text-xs text-white/30">4.2ms</span>
+                                    </div>
+                                    <AnimatedBar percent={38} color="rgba(255,255,255,0.15)" delay={400} />
                                 </div>
-                                <AnimatedBar percent={38} color="rgba(255,255,255,0.2)" delay={400} />
                             </div>
                         </div>
-                    </motion.div>
+                    </FeatureCard>
 
-                    {/* ── Non-Custodial ────────────────────────────────── */}
-                    <motion.div
-                        variants={fadeUp}
-                        className="group relative rounded-2xl border border-white/[0.07] bg-white/[0.02] hover:bg-white/[0.04] transition-all duration-400 overflow-hidden p-7"
-                    >
+                    {/* ── Non-Custodial ── */}
+                    <FeatureCard>
                         {/* Gold accent glow */}
-                        <div className="absolute -top-16 -right-16 w-32 h-32 rounded-full bg-[#FFD60A] blur-[80px] opacity-0 group-hover:opacity-[0.08] transition-opacity duration-700" />
+                        <div className="absolute -top-10 -right-10 w-40 h-40 rounded-full bg-[#FFD60A] blur-[80px] opacity-0 group-hover:opacity-[0.15] transition-opacity duration-700" />
 
-                        <div className="relative z-10">
-                            <div className="w-11 h-11 rounded-xl bg-[#FFD60A]/10 border border-[#FFD60A]/20 flex items-center justify-center mb-5">
-                                <span className="text-[#FFD60A]"><IconLock /></span>
+                        <div className="p-8">
+                            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#FFD60A]/20 to-[#FFD60A]/5 border border-[#FFD60A]/30 flex items-center justify-center mb-6 shadow-[0_0_20px_rgba(255,214,10,0.1)]">
+                                <span className="text-[#FFD60A] text-xl"><IconLock /></span>
                             </div>
-                            <h3 className="font-body text-lg font-bold text-white mb-2">Non-Custodial</h3>
-                            <p className="font-body text-sm text-white/40 leading-relaxed group-hover:text-white/55 transition-colors">
+                            <h3 className="font-body text-xl font-bold text-white mb-3">Non-Custodial</h3>
+                            <p className="font-body text-[15px] text-white/50 leading-relaxed group-hover:text-white/70 transition-colors">
                                 Your keys, your assets. Funds flow directly to audited on-chain vaults.
                             </p>
                         </div>
-                    </motion.div>
+                    </FeatureCard>
 
-                    {/* ── Multi-Asset ──────────────────────────────────── */}
-                    <motion.div
-                        variants={fadeUp}
-                        className="group relative rounded-2xl border border-white/[0.07] bg-white/[0.02] hover:bg-white/[0.04] transition-all duration-400 overflow-hidden p-7"
-                    >
-                        <div className="relative z-10">
-                            <div className="flex items-center mb-5">
+                    {/* ── Multi-Asset ── */}
+                    <FeatureCard>
+                        <div className="p-8">
+                            <div className="flex items-center mb-6">
                                 {TOKEN_BADGES.map((token, i) => (
                                     <div
                                         key={i}
-                                        className="w-9 h-9 rounded-full flex items-center justify-center text-[10px] font-bold text-white border-2 border-[#0A0A0B]"
-                                        style={{ background: token.color, marginLeft: i > 0 ? "-8px" : "0", zIndex: 3 - i }}
+                                        className="w-10 h-10 rounded-full flex items-center justify-center text-[11px] font-bold text-white border-[3px] border-[#0A0A0B] shadow-lg"
+                                        style={{ background: token.color, marginLeft: i > 0 ? "-12px" : "0", zIndex: 3 - i }}
                                     >
                                         {token.label}
                                     </div>
                                 ))}
                             </div>
-                            <h3 className="font-body text-lg font-bold text-white mb-2">Multi-Asset</h3>
-                            <p className="font-body text-sm text-white/40 leading-relaxed group-hover:text-white/55 transition-colors">
-                                T-Bills, Gold, and Credit — all in one unified position.
+                            <h3 className="font-body text-xl font-bold text-white mb-3">Multi-Asset</h3>
+                            <p className="font-body text-[15px] text-white/50 leading-relaxed group-hover:text-white/70 transition-colors">
+                                T-Bills, Gold, and Credit — auto-routed to the highest yield across DeFi.
                             </p>
                         </div>
-                    </motion.div>
+                    </FeatureCard>
 
-                    {/* ── Live Analytics (spans 2 cols) ────────────────── */}
-                    <motion.div
-                        variants={fadeUp}
-                        className="md:col-span-2 group relative rounded-2xl border border-white/[0.07] bg-white/[0.02] hover:bg-white/[0.04] transition-all duration-400 overflow-hidden"
-                    >
-                        <div className="relative z-10 p-7 pb-0">
-                            <div className="flex items-start justify-between mb-2">
-                                <div>
-                                    <h3 className="font-body text-lg font-bold text-white mb-1">Live Analytics</h3>
-                                    <p className="font-body text-sm text-white/40">
-                                        Real-time P&L tracking with Chainlink oracle feeds.
-                                    </p>
-                                </div>
-                                <div className="text-right">
-                                    <div className="font-code text-xs text-[#28A0F0]">+12.84%</div>
-                                    <div className="font-code text-[10px] text-white/30">30d return</div>
-                                </div>
+                    {/* ── Live Analytics (spans 2 cols) ── */}
+                    <FeatureCard className="md:col-span-2">
+                        <div className="p-8 pb-0 flex flex-col md:flex-row md:items-start justify-between mb-4">
+                            <div className="mb-4 md:mb-0">
+                                <h3 className="font-body text-xl font-bold text-white mb-2">Live Analytics</h3>
+                                <p className="font-body text-[15px] text-white/50 max-w-sm">
+                                    Real-time P&L tracking backed by Chainlink verifiable oracle feeds.
+                                </p>
+                            </div>
+                            <div className="text-left md:text-right bg-white/[0.03] border border-white/10 px-4 py-2 rounded-xl">
+                                <div className="font-code text-lg text-[#28A0F0] font-bold">+12.84%</div>
+                                <div className="font-code text-[11px] text-white/40 tracking-wider uppercase mt-1">30d APY</div>
                             </div>
                         </div>
                         {/* Sparkline chart */}
-                        <div className="h-24 px-7 pb-4 mt-2">
+                        <div className="h-28 px-8 pb-6 mt-2">
                             <Sparkline />
                         </div>
-                    </motion.div>
+                    </FeatureCard>
 
-                    {/* ── Gas Efficiency ───────────────────────────────── */}
-                    <motion.div
-                        variants={fadeUp}
-                        className="group relative rounded-2xl border border-white/[0.07] bg-white/[0.02] hover:bg-white/[0.04] transition-all duration-400 overflow-hidden p-7 flex flex-col justify-between"
-                    >
-                        <div className="relative z-10">
-                            <h3 className="font-body text-lg font-bold text-white mb-2">Gas Efficiency</h3>
-                            <p className="font-body text-sm text-white/40 leading-relaxed group-hover:text-white/55 transition-colors mb-5">
-                                94% cheaper transactions versus standard Solidity contracts.
-                            </p>
-                        </div>
-                        <div>
-                            <div className="flex items-end justify-between mb-2">
-                                <span className="font-code text-[10px] text-white/30 uppercase tracking-wider">Savings</span>
-                                <span className="font-body text-2xl font-bold text-[#FFD60A]">94%</span>
+                    {/* ── Gas Efficiency ── */}
+                    <FeatureCard>
+                        <div className="p-8 flex flex-col h-full justify-between">
+                            <div>
+                                <h3 className="font-body text-xl font-bold text-white mb-3">Gas Efficiency</h3>
+                                <p className="font-body text-[15px] text-white/50 leading-relaxed group-hover:text-white/70 transition-colors mb-6">
+                                    Pennies per transaction. Institutional yield execution without Ethereum mainnet fees.
+                                </p>
                             </div>
-                            <AnimatedBar percent={94} color="#FFD60A" delay={200} />
+                            <div className="bg-white/[0.03] border border-white/10 rounded-xl p-4">
+                                <div className="flex items-end justify-between mb-3">
+                                    <span className="font-code text-[11px] text-white/40 uppercase tracking-widest">Savings</span>
+                                    <span className="font-code text-2xl font-bold text-[#FFD60A] drop-shadow-[0_0_10px_rgba(255,214,10,0.3)]">94%</span>
+                                </div>
+                                <AnimatedBar percent={94} color="#FFD60A" delay={200} />
+                            </div>
                         </div>
-                    </motion.div>
+                    </FeatureCard>
                 </motion.div>
             </div>
         </section>
     );
 }
+
