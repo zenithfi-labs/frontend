@@ -55,9 +55,12 @@ function FeatureCard({ children, className = "" }: { children: React.ReactNode, 
 
 export default function Features() {
     return (
-        <section className="relative py-32 px-6 bg-black overflow-hidden">
+        <section className="relative py-32 px-6 overflow-hidden">
+            {/* Soft Background Transition */}
+            <div className="absolute inset-0 bg-gradient-to-b from-black to-[#0A0A0B] pointer-events-none z-0" />
+
             {/* Ambient Background Glows */}
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-[#28A0F0] opacity-[0.15] blur-[120px] pointer-events-none rounded-full mix-blend-screen" />
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-[#28A0F0] opacity-[0.15] blur-[120px] pointer-events-none rounded-full mix-blend-screen z-0" />
             <div className="absolute bottom-0 right-0 w-[600px] h-[600px] bg-[#FFD60A] opacity-[0.08] blur-[150px] pointer-events-none rounded-full mix-blend-screen" />
 
             <div className="max-w-6xl mx-auto relative z-10">

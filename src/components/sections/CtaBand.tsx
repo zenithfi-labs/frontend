@@ -8,14 +8,13 @@ export default function CtaBand() {
     return (
         <section
             className="relative py-28 px-6 overflow-hidden"
-            style={{
-                borderTop: "1px solid rgba(255,255,255,0.05)",
-                borderBottom: "1px solid rgba(255,255,255,0.05)",
-            }}
         >
+            {/* Soft Background Transition */}
+            <div className="absolute inset-0 bg-gradient-to-b from-black to-[#0A0A0B] pointer-events-none z-0" />
+
             {/* Ambient glow */}
             <div
-                className="absolute inset-0 pointer-events-none"
+                className="absolute inset-0 pointer-events-none z-0"
                 style={{
                     background:
                         "radial-gradient(ellipse 75% 90% at 50% 50%, rgba(40,160,240,0.07) 0%, transparent 70%)",

@@ -11,9 +11,12 @@ import usdtLogo from "@/app/brands/usdt.svg";
 
 export default function IntelligenceLayer() {
     return (
-        <section className="relative py-32 px-6 overflow-hidden bg-black/50">
+        <section className="relative py-32 px-6 overflow-hidden">
+            {/* Soft Background Transition */}
+            <div className="absolute inset-0 bg-gradient-to-b from-[#0A0A0B] via-black/80 to-black pointer-events-none z-0" />
+
             {/* Glow Blob - Center */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-[#28A0F0] opacity-[0.03] blur-[100px] pointer-events-none rounded-full" />
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-[#28A0F0] opacity-[0.03] blur-[100px] pointer-events-none rounded-full z-0" />
 
             <div className="max-w-6xl mx-auto relative z-10">
                 {/* Section Header */}

@@ -18,7 +18,7 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Zenith — The High-Performance Yield Layer for Real-World Assets",
+  title: "Zenith",
   description:
     "Institutional-grade yield optimization on tokenized real-world assets. Automated, transparent, and built for serious capital.",
 };
