@@ -1,6 +1,5 @@
 "use client";
 
-import { FOOTER_LINKS } from "@/data/constants";
 import { IconBolt } from "@/components/icons";
 
 export default function Footer() {
