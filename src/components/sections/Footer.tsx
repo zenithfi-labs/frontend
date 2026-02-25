@@ -96,7 +96,7 @@ export default function Footer() {
                 </div>
 
                 {/* Vast "ZENITH" Text at Bottom Background */}
-                <div className="w-full justify-center hidden md:flex mt-10 mb-[-1rem] pointer-events-none select-none">
+                <div className="w-full justify-center flex mt-10 mb-[-1rem] pointer-events-none select-none">
                     <span
                         className="font-display font-bold text-center leading-none"
                         style={{

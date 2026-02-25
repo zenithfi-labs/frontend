@@ -14,9 +14,9 @@ export default function Navbar() {
 
     return (
         <nav
-            className={`fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 md:px-[7.5rem] py-4 transition-all duration-500 ${scrolled
-                    ? "bg-[#0A0A0B]/70 backdrop-blur-xl border-b border-white/[0.06] shadow-lg shadow-black/20"
-                    : "bg-transparent border-b border-transparent"
+            className={`fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 md:px-[7.5rem] transition-all duration-500 ${scrolled
+                ? "py-4 bg-[#0A0A0B]/70 backdrop-blur-xl border-b border-white/[0.06] shadow-lg shadow-black/20"
+                : "pt-6 pb-4 bg-transparent border-b border-transparent"
                 }`}
         >
             {/* Wordmark */}
