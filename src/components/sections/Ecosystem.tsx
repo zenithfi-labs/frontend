@@ -65,11 +65,11 @@ export default function Ecosystem() {
             {/* Infinite Marquee Container */}
             <div className="relative w-full max-w-[100vw] overflow-hidden flex flex-col gap-6 py-4">
                 {/* Edge fade masks */}
-                <div className="absolute top-0 left-0 w-24 md:w-56 h-full bg-gradient-to-r from-black via-black/90 to-transparent z-20 pointer-events-none" />
-                <div className="absolute top-0 right-0 w-24 md:w-56 h-full bg-gradient-to-l from-black via-black/90 to-transparent z-20 pointer-events-none" />
+                <div className="absolute top-0 left-0 w-12 md:w-56 h-full bg-gradient-to-r from-black via-black/90 to-transparent z-20 pointer-events-none" />
+                <div className="absolute top-0 right-0 w-12 md:w-56 h-full bg-gradient-to-l from-black via-black/90 to-transparent z-20 pointer-events-none" />
 
                 <div className="flex flex-col gap-1 w-full mt-4">
-                    <div className="pl-[10vw] mb-2 font-code text-[11px] text-white/40 tracking-[0.2em] uppercase">Supported Assets</div>
+                    <div className="relative z-30 pl-6 md:pl-[10vw] mb-2 font-code text-[11px] text-white/70 md:text-white/40 tracking-[0.2em] uppercase">Supported Assets</div>
                     {/* The Scrolling Track 1: Supported Assets (Right to Left) */}
                     <div className="flex w-max animate-infinite-scroll">
                         {[...row1, ...row1].map((partner, i) => (
@@ -90,7 +90,7 @@ export default function Ecosystem() {
                 </div>
 
                 <div className="flex flex-col gap-1 w-full mt-8">
-                    <div className="pr-[10vw] md:text-right text-left pl-[10vw] md:pl-0 mb-2 font-code text-[11px] text-[#FFD60A]/50 tracking-[0.2em] uppercase">Yield Sources</div>
+                    <div className="relative z-30 pr-[10vw] md:text-right text-left pl-6 md:pl-0 mb-2 font-code text-[11px] text-[#FFD60A]/80 md:text-[#FFD60A]/50 tracking-[0.2em] uppercase">Yield Sources</div>
                     {/* The Scrolling Track 2: Yield Sources (Left to Right) */}
                     <div className="flex w-max animate-infinite-scroll" style={{ animationDirection: 'reverse' }}>
                         {[...row2, ...row2].map((source, i) => (

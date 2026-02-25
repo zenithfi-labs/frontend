@@ -1,11 +1,14 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { fadeUp, stagger } from "@/lib/animations";
 import PillButton from "@/components/ui/PillButton";
 import Particles from "@/components/ui/Particles";
 
 export default function Hero() {
+    const { scrollY } = useScroll();
+    const scrollOpacity = useTransform(scrollY, [0, 100], [0.6, 0]);
+
     return (
         <section className="relative min-h-screen bg-black overflow-hidden">
             {/* Background video (700KB compressed) — poster shows instantly while video loads */}
@@ -114,10 +117,13 @@ export default function Hero() {
             />
 
             {/* Scroll hint */}
-            <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-60 pointer-events-none z-30">
+            <motion.div
+                style={{ opacity: scrollOpacity }}
+                className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 pointer-events-none z-30"
+            >
                 <span className="font-code text-[9px] tracking-[0.4em] text-white/70 uppercase">Scroll</span>
                 <div className="w-px h-10 bg-gradient-to-b from-white/50 to-transparent" />
-            </div>
+            </motion.div>
         </section>
     );
 }
