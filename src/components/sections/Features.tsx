@@ -66,9 +66,9 @@ export default function Features() {
             {/* Soft Background Transition */}
             <div className="absolute inset-0 bg-gradient-to-b from-black to-[#0A0A0B] pointer-events-none z-0" />
 
-            {/* Ambient Background Glows */}
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-[#28A0F0] opacity-[0.15] blur-[120px] pointer-events-none rounded-full mix-blend-screen z-0" />
-            <div className="absolute bottom-0 right-0 w-[600px] h-[600px] bg-[#FFD60A] opacity-[0.08] blur-[150px] pointer-events-none rounded-full mix-blend-screen" />
+            {/* Ambient Background Glows — hidden on mobile (GPU-heavy) */}
+            <div className="hidden md:block absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-[#28A0F0] opacity-[0.15] blur-[120px] pointer-events-none rounded-full mix-blend-screen z-0" />
+            <div className="hidden md:block absolute bottom-0 right-0 w-[600px] h-[600px] bg-[#FFD60A] opacity-[0.08] blur-[150px] pointer-events-none rounded-full mix-blend-screen" />
 
             <div className="max-w-6xl mx-auto relative z-10">
                 {/* Section Header */}
@@ -118,8 +118,8 @@ export default function Features() {
                                 WebkitMaskImage: "radial-gradient(ellipse at center, black 40%, transparent 80%)"
                             }}
                         />
-                        {/* Blue glow core */}
-                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 rounded-full bg-[#28A0F0] blur-[100px] opacity-[0.15] group-hover:opacity-[0.25] transition-opacity duration-700" />
+                        {/* Blue glow core — hidden on mobile */}
+                        <div className="hidden md:block absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 rounded-full bg-[#28A0F0] blur-[100px] opacity-[0.15] group-hover:opacity-[0.25] transition-opacity duration-700" />
 
                         <div className="relative p-8 md:p-10 flex flex-col justify-between h-full min-h-[380px]">
                             <div>
@@ -160,8 +160,8 @@ export default function Features() {
 
                     {/* ── Non-Custodial ── */}
                     <FeatureCard>
-                        {/* Gold accent glow */}
-                        <div className="absolute -top-10 -right-10 w-40 h-40 rounded-full bg-[#FFD60A] blur-[80px] opacity-0 group-hover:opacity-[0.15] transition-opacity duration-700" />
+                        {/* Gold accent glow — hidden on mobile */}
+                        <div className="hidden md:block absolute -top-10 -right-10 w-40 h-40 rounded-full bg-[#FFD60A] blur-[80px] opacity-0 group-hover:opacity-[0.15] transition-opacity duration-700" />
 
                         <div className="p-8">
                             <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#FFD60A]/20 to-[#FFD60A]/5 border border-[#FFD60A]/30 flex items-center justify-center mb-6 shadow-[0_0_20px_rgba(255,214,10,0.1)]">

@@ -4,24 +4,27 @@ import { motion } from "framer-motion";
 import { fadeUp, stagger } from "@/lib/animations";
 import PillButton from "@/components/ui/PillButton";
 import Particles from "@/components/ui/Particles";
-import { HERO_VIDEO_URL } from "@/data/constants";
 
 export default function Hero() {
     return (
         <section className="relative min-h-screen bg-black overflow-hidden">
-            {/* Background video */}
+            {/* Background video (700KB compressed) — poster shows instantly while video loads */}
             <video
                 autoPlay
                 muted
                 loop
                 playsInline
+                preload="metadata"
+                poster="/hero-poster.webp"
                 className="absolute inset-0 w-full h-full object-cover"
             >
-                <source src={HERO_VIDEO_URL} type="video/mp4" />
+                <source src="/hero-bg.mp4" type="video/mp4" />
             </video>
 
-            {/* Floating particles overlay */}
-            <Particles />
+            {/* Floating particles overlay — only on desktop */}
+            <div className="hidden md:block">
+                <Particles />
+            </div>
 
             {/* Cinematic Vignette */}
             <div

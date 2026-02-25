@@ -326,3 +326,43 @@ body::after {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* ── Mobile GPU performance ───────────────────────────── */
+/* Kill all GPU-heavy effects on mobile to prevent jank    */
+@media (max-width: 768px) {
+  /* Remove noise grain overlay — feTurbulence SVG filter is very expensive */
+  body::after {
+    display: none !important;
+  }
+
+  /* Kill ALL backdrop-blur on mobile — biggest GPU killer */
+  .backdrop-blur-sm,
+  .backdrop-blur-md,
+  .backdrop-blur-xl,
+  .glass-card {
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+  }
+
+  /* Reduce glow blob sizes and blur radius drastically */
+  .glow-blob {
+    width: 300px !important;
+    height: 300px !important;
+    filter: blur(60px) !important;
+    opacity: 0.08 !important;
+  }
+
+  /* Disable hero glow pulse animation — just static subtle glow */
+  .hero-glow,
+  .hero-glow-secondary {
+    animation: none !important;
+    width: 400px !important;
+    height: 400px !important;
+    opacity: 0.4 !important;
+  }
+
+  /* Disable mix-blend-mode on mobile (forces compositing) */
+  .mix-blend-screen {
+    mix-blend-mode: normal !important;
+  }
+}

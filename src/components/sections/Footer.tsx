@@ -8,9 +8,9 @@ export default function Footer() {
             className="relative pt-24 pb-12 px-6 bg-gradient-to-b from-[#0A0A0B] to-black overflow-hidden"
             style={{ borderTop: "1px solid rgba(255,255,255,0.04)" }}
         >
-            {/* Background Glows */}
-            <div className="absolute top-0 left-1/4 w-[500px] h-[300px] bg-[#28A0F0] opacity-[0.03] blur-[120px] pointer-events-none rounded-full" />
-            <div className="absolute bottom-0 right-1/4 w-[400px] h-[300px] bg-[#FFD60A] opacity-[0.02] blur-[100px] pointer-events-none rounded-full" />
+            {/* Background Glows — hidden on mobile */}
+            <div className="hidden md:block absolute top-0 left-1/4 w-[500px] h-[300px] bg-[#28A0F0] opacity-[0.03] blur-[120px] pointer-events-none rounded-full" />
+            <div className="hidden md:block absolute bottom-0 right-1/4 w-[400px] h-[300px] bg-[#FFD60A] opacity-[0.02] blur-[100px] pointer-events-none rounded-full" />
 
             <div className="max-w-6xl mx-auto relative z-10">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12 lg:gap-8 mb-16 md:mb-20">

@@ -33,9 +33,9 @@ export default function Ecosystem() {
             {/* Soft Background Transition */}
             <div className="absolute inset-0 bg-gradient-to-b from-[#0A0A0B] to-black pointer-events-none z-0" />
 
-            {/* Glow Blob - Gold Right */}
-            <div className="absolute bottom-0 right-0 w-[800px] h-[500px] bg-[#FFD60A] opacity-[0.05] blur-[150px] pointer-events-none rounded-full mix-blend-screen z-0" />
-            <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-[#28A0F0] opacity-[0.03] blur-[120px] pointer-events-none rounded-full mix-blend-screen" />
+            {/* Glow Blobs — hidden on mobile (GPU-heavy) */}
+            <div className="hidden md:block absolute bottom-0 right-0 w-[800px] h-[500px] bg-[#FFD60A] opacity-[0.05] blur-[150px] pointer-events-none rounded-full mix-blend-screen z-0" />
+            <div className="hidden md:block absolute top-0 left-0 w-[500px] h-[500px] bg-[#28A0F0] opacity-[0.03] blur-[120px] pointer-events-none rounded-full mix-blend-screen" />
 
             <div className="max-w-6xl mx-auto relative z-10 px-6">
                 <div className="flex flex-col md:flex-row items-center justify-between gap-8 mb-16">
