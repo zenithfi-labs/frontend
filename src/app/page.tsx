@@ -2,6 +2,7 @@ import Navbar from "@/components/sections/Navbar";
 import Hero from "@/components/sections/Hero";
 import StatsBar from "@/components/sections/StatsBar";
 import HowItWorks from "@/components/sections/HowItWorks";
+import IntelligenceLayer from "@/components/sections/IntelligenceLayer";
 import Features from "@/components/sections/Features";
 import Ecosystem from "@/components/sections/Ecosystem";
 import CtaBand from "@/components/sections/CtaBand";
@@ -14,6 +15,7 @@ export default function Home() {
       <Hero />
       <StatsBar />
       <HowItWorks />
+      <IntelligenceLayer />
       <Features />
       <Ecosystem />
       <CtaBand />
