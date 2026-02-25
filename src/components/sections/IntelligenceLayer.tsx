@@ -52,34 +52,41 @@ export default function IntelligenceLayer() {
                     {/* Background SVG for Paths */}
                     <svg viewBox="0 0 896 400" className="absolute inset-0 w-full h-full z-0 pointer-events-none" style={{ filter: 'drop-shadow(0 0 8px rgba(40,160,240,0.4))' }}>
                         <defs>
-                            <linearGradient id="flow-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <linearGradient id="flow-grad" x1="120" y1="0" x2="750" y2="0" gradientUnits="userSpaceOnUse">
                                 <stop offset="0%" stopColor="#28A0F0" stopOpacity="0.2" />
                                 <stop offset="50%" stopColor="#28A0F0" stopOpacity="0.8" />
                                 <stop offset="100%" stopColor="#FFD60A" stopOpacity="0.8" />
                             </linearGradient>
                         </defs>
 
-                        {/* Left to Center Paths */}
+                        {/* 1. Base Static Lines (Extremely subtle track) */}
                         {/* USDC -> Engine */}
-                        <path d="M 120 120 C 250 120, 300 200, 448 200" stroke="url(#flow-grad)" strokeWidth="2" fill="none" className="opacity-30" />
-                        <path d="M 120 120 C 250 120, 300 200, 448 200" stroke="#28A0F0" strokeWidth="2" fill="none" strokeDasharray="10 20" className="animate-[flow_1s_linear_infinite]" />
-
+                        <path d="M 120 120 C 250 120, 300 200, 448 200" stroke="rgba(255,255,255,0.05)" strokeWidth="1" fill="none" />
                         {/* USDT -> Engine */}
-                        <path d="M 120 280 C 250 280, 300 200, 448 200" stroke="url(#flow-grad)" strokeWidth="2" fill="none" className="opacity-30" />
-                        <path d="M 120 280 C 250 280, 300 200, 448 200" stroke="#28A0F0" strokeWidth="2" fill="none" strokeDasharray="10 20" className="animate-[flow_1.2s_linear_infinite]" />
-
-                        {/* Center to Right Paths */}
+                        <path d="M 120 280 C 250 280, 300 200, 448 200" stroke="rgba(255,255,255,0.05)" strokeWidth="1" fill="none" />
                         {/* Engine -> Ondo */}
-                        <path d="M 448 200 C 600 200, 650 80, 750 80" stroke="url(#flow-grad)" strokeWidth="2" fill="none" className="opacity-30" />
-                        <path d="M 448 200 C 600 200, 650 80, 750 80" stroke="#FFD60A" strokeWidth="2" fill="none" strokeDasharray="10 20" className="animate-[flow_1.5s_linear_infinite]" />
-
+                        <path d="M 448 200 C 600 200, 650 80, 750 80" stroke="rgba(255,255,255,0.05)" strokeWidth="1" fill="none" />
                         {/* Engine -> Mountain */}
-                        <path d="M 448 200 C 600 200, 650 200, 750 200" stroke="url(#flow-grad)" strokeWidth="2" fill="none" className="opacity-30" />
-                        <path d="M 448 200 C 600 200, 650 200, 750 200" stroke="#FFD60A" strokeWidth="2" fill="none" strokeDasharray="10 20" className="animate-[flow_1s_linear_infinite]" />
-
+                        <path d="M 448 200 C 600 200, 650 200, 750 200" stroke="rgba(255,255,255,0.05)" strokeWidth="1" fill="none" />
                         {/* Engine -> BlackRock */}
-                        <path d="M 448 200 C 600 200, 650 320, 750 320" stroke="url(#flow-grad)" strokeWidth="2" fill="none" className="opacity-30" />
-                        <path d="M 448 200 C 600 200, 650 320, 750 320" stroke="#FFD60A" strokeWidth="2" fill="none" strokeDasharray="10 20" className="animate-[flow_1.3s_linear_infinite]" />
+                        <path d="M 448 200 C 600 200, 650 320, 750 320" stroke="rgba(255,255,255,0.05)" strokeWidth="1" fill="none" />
+
+                        {/* 2. Pulsing Glow Base layer (Breathing gradient track) */}
+                        <path d="M 120 120 C 250 120, 300 200, 448 200" stroke="url(#flow-grad)" strokeWidth="1.5" fill="none" className="animate-[flow-pulse_3s_ease-in-out_infinite]" />
+                        <path d="M 120 280 C 250 280, 300 200, 448 200" stroke="url(#flow-grad)" strokeWidth="1.5" fill="none" className="animate-[flow-pulse_3s_ease-in-out_infinite_0.5s]" />
+                        <path d="M 448 200 C 600 200, 650 80, 750 80" stroke="url(#flow-grad)" strokeWidth="1.5" fill="none" className="animate-[flow-pulse_3s_ease-in-out_infinite_1s]" />
+                        <path d="M 448 200 C 600 200, 650 200, 750 200" stroke="url(#flow-grad)" strokeWidth="1.5" fill="none" className="animate-[flow-pulse_3s_ease-in-out_infinite_1.5s]" />
+                        <path d="M 448 200 C 600 200, 650 320, 750 320" stroke="url(#flow-grad)" strokeWidth="1.5" fill="none" className="animate-[flow-pulse_3s_ease-in-out_infinite_2s]" />
+
+                        {/* 3. Fast Data Packets / Streaks (Solid Color with Dasharray offset) */}
+                        {/* Left Side (Input) - Blue Data */}
+                        <path d="M 120 120 C 250 120, 300 200, 448 200" stroke="#28A0F0" strokeWidth="3" strokeLinecap="round" fill="none" strokeDasharray="30 1170" className="animate-[flow-fast_3s_linear_infinite]" style={{ filter: 'drop-shadow(0 0 6px #28A0F0)' }} />
+                        <path d="M 120 280 C 250 280, 300 200, 448 200" stroke="#28A0F0" strokeWidth="3" strokeLinecap="round" fill="none" strokeDasharray="30 1170" className="animate-[flow-fast_3.2s_linear_infinite_0.5s]" style={{ filter: 'drop-shadow(0 0 6px #28A0F0)' }} />
+
+                        {/* Right Side (Output) - Gold Yields */}
+                        <path d="M 448 200 C 600 200, 650 80, 750 80" stroke="#FFD60A" strokeWidth="3" strokeLinecap="round" fill="none" strokeDasharray="30 1170" className="animate-[flow-fast_2.8s_linear_infinite_1s]" style={{ filter: 'drop-shadow(0 0 6px #FFD60A)' }} />
+                        <path d="M 448 200 C 600 200, 650 200, 750 200" stroke="#FFD60A" strokeWidth="3" strokeLinecap="round" fill="none" strokeDasharray="30 1170" className="animate-[flow-fast_3.1s_linear_infinite_0.2s]" style={{ filter: 'drop-shadow(0 0 6px #FFD60A)' }} />
+                        <path d="M 448 200 C 600 200, 650 320, 750 320" stroke="#FFD60A" strokeWidth="3" strokeLinecap="round" fill="none" strokeDasharray="30 1170" className="animate-[flow-fast_2.9s_linear_infinite_1.5s]" style={{ filter: 'drop-shadow(0 0 6px #FFD60A)' }} />
                     </svg>
 
                     {/* Left nodes: USDC / USDT */}
