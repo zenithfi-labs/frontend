@@ -78,7 +78,7 @@ export default function Features() {
                         className="font-body text-4xl md:text-5xl font-bold tracking-tight text-white mb-5"
                     >
                         Built Different.<br />
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-white/40 to-white/10">Performs Different.</span>
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#28A0F0] to-[#FFD60A]">Performs Different.</span>
                     </motion.h2>
                 </motion.div>
 
@@ -124,15 +124,16 @@ export default function Features() {
 
                             {/* Execution speed metrics */}
                             <div className="mt-10 space-y-5 lg:pl-4 lg:border-l lg:border-white/10">
-                                <div>
-                                    <div className="flex items-center justify-between mb-2">
+                                <div className="relative">
+                                    <div className="absolute -top-4 -left-4 w-32 h-16 bg-[#28A0F0]/10 blur-xl pointer-events-none rounded-full" />
+                                    <div className="flex items-center justify-between mb-2 relative z-10">
                                         <span className="font-code text-[11px] text-white/50 uppercase tracking-widest font-medium">Zenith (Rust)</span>
                                         <span className="font-code text-xs text-[#28A0F0] font-bold drop-shadow-[0_0_8px_rgba(40,160,240,0.5)]">0.4ms</span>
                                     </div>
                                     <AnimatedBar percent={95} color="#28A0F0" />
                                 </div>
-                                <div>
-                                    <div className="flex items-center justify-between mb-2 mt-4">
+                                <div className="relative">
+                                    <div className="flex items-center justify-between mb-2 mt-4 relative z-10">
                                         <span className="font-code text-[11px] text-white/40 uppercase tracking-widest font-medium">Standard EVM</span>
                                         <span className="font-code text-xs text-white/30">4.2ms</span>
                                     </div>

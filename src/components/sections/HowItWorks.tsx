@@ -54,7 +54,7 @@ export default function HowItWorks() {
                         className="font-body text-4xl md:text-5xl font-bold tracking-tight text-white mb-6"
                     >
                         Institutional Grade.<br />
-                        <span className="text-white/40">Zero Complexity.</span>
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#28A0F0] to-[#FFD60A]">Zero Complexity.</span>
                     </motion.h2>
                 </motion.div>
 

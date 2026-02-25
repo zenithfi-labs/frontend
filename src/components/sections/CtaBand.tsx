@@ -38,7 +38,7 @@ export default function CtaBand() {
                 </motion.h2>
                 <motion.h2
                     variants={fadeUp}
-                    className="font-body text-4xl md:text-[3rem] font-semibold tracking-tight text-white/60 mb-8 leading-[1.15]"
+                    className="font-body text-4xl md:text-[3rem] font-semibold tracking-tight mb-8 leading-[1.15] text-transparent bg-clip-text bg-gradient-to-r from-[#28A0F0] to-[#FFD60A]"
                 >
                     real-world assets.
                 </motion.h2>

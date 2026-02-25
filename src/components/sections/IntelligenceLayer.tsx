@@ -37,7 +37,7 @@ export default function IntelligenceLayer() {
                         variants={fadeUp}
                         className="font-body text-4xl md:text-5xl font-bold tracking-tight text-white mb-6"
                     >
-                        The Intelligence <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#28A0F0] to-[#FFD60A]">Layer</span>
+                        The <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#28A0F0] to-[#FFD60A]">Intelligence Layer</span>
                     </motion.h2>
                     <motion.p
                         variants={fadeUp}
