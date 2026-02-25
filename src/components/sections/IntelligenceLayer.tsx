@@ -54,7 +54,7 @@ export default function IntelligenceLayer() {
                 {/* The Brain / Routing Flow Diagram */}
                 <motion.div variants={fadeUp} className="relative w-full max-w-4xl mx-auto h-[400px] hidden md:flex items-center justify-between">
                     {/* Background SVG for Paths */}
-                    <svg viewBox="0 0 896 400" className="absolute inset-0 w-full h-full z-0 pointer-events-none" style={{ filter: 'drop-shadow(0 0 8px rgba(40,160,240,0.4))' }}>
+                    <svg viewBox="0 0 896 400" className="absolute inset-0 w-full h-full z-0 pointer-events-none">
                         <defs>
                             <linearGradient id="flow-grad" x1="120" y1="0" x2="750" y2="0" gradientUnits="userSpaceOnUse">
                                 <stop offset="0%" stopColor="#28A0F0" stopOpacity="0.2" />
@@ -87,14 +87,14 @@ export default function IntelligenceLayer() {
 
                         {/* 3. Fast Data Packets / Streaks (Solid Color with Dasharray offset) */}
                         {/* Left Side (Input) - Blue Data */}
-                        <path d="M 200 80 C 324 80, 324 200, 448 200" stroke="#28A0F0" strokeWidth="3" strokeLinecap="round" fill="none" strokeDasharray="30 1170" className="animate-[flow-fast_3s_linear_infinite]" style={{ filter: 'drop-shadow(0 0 6px #28A0F0)' }} />
-                        <path d="M 200 200 C 324 200, 324 200, 448 200" stroke="#28A0F0" strokeWidth="3" strokeLinecap="round" fill="none" strokeDasharray="30 1170" className="animate-[flow-fast_3.2s_linear_infinite_0.5s]" style={{ filter: 'drop-shadow(0 0 6px #28A0F0)' }} />
-                        <path d="M 200 320 C 324 320, 324 200, 448 200" stroke="#28A0F0" strokeWidth="3" strokeLinecap="round" fill="none" strokeDasharray="30 1170" className="animate-[flow-fast_2.9s_linear_infinite_1s]" style={{ filter: 'drop-shadow(0 0 6px #28A0F0)' }} />
+                        <path d="M 200 80 C 324 80, 324 200, 448 200" stroke="#28A0F0" strokeWidth="3" strokeLinecap="round" fill="none" strokeDasharray="30 1170" className="animate-[flow-fast_3s_linear_infinite]" opacity="0.9" />
+                        <path d="M 200 200 C 324 200, 324 200, 448 200" stroke="#28A0F0" strokeWidth="3" strokeLinecap="round" fill="none" strokeDasharray="30 1170" className="animate-[flow-fast_3.2s_linear_infinite_0.5s]" opacity="0.9" />
+                        <path d="M 200 320 C 324 320, 324 200, 448 200" stroke="#28A0F0" strokeWidth="3" strokeLinecap="round" fill="none" strokeDasharray="30 1170" className="animate-[flow-fast_2.9s_linear_infinite_1s]" opacity="0.9" />
 
                         {/* Right Side (Output) - Gold Yields */}
-                        <path d="M 448 200 C 572 200, 572 80, 696 80" stroke="#FFD60A" strokeWidth="3" strokeLinecap="round" fill="none" strokeDasharray="30 1170" className="animate-[flow-fast_2.8s_linear_infinite_1s]" style={{ filter: 'drop-shadow(0 0 6px #FFD60A)' }} />
-                        <path d="M 448 200 C 572 200, 572 200, 696 200" stroke="#FFD60A" strokeWidth="3" strokeLinecap="round" fill="none" strokeDasharray="30 1170" className="animate-[flow-fast_3.1s_linear_infinite_0.2s]" style={{ filter: 'drop-shadow(0 0 6px #FFD60A)' }} />
-                        <path d="M 448 200 C 572 200, 572 320, 696 320" stroke="#FFD60A" strokeWidth="3" strokeLinecap="round" fill="none" strokeDasharray="30 1170" className="animate-[flow-fast_2.9s_linear_infinite_1.5s]" style={{ filter: 'drop-shadow(0 0 6px #FFD60A)' }} />
+                        <path d="M 448 200 C 572 200, 572 80, 696 80" stroke="#FFD60A" strokeWidth="3" strokeLinecap="round" fill="none" strokeDasharray="30 1170" className="animate-[flow-fast_2.8s_linear_infinite_1s]" opacity="0.9" />
+                        <path d="M 448 200 C 572 200, 572 200, 696 200" stroke="#FFD60A" strokeWidth="3" strokeLinecap="round" fill="none" strokeDasharray="30 1170" className="animate-[flow-fast_3.1s_linear_infinite_0.2s]" opacity="0.9" />
+                        <path d="M 448 200 C 572 200, 572 320, 696 320" stroke="#FFD60A" strokeWidth="3" strokeLinecap="round" fill="none" strokeDasharray="30 1170" className="animate-[flow-fast_2.9s_linear_infinite_1.5s]" opacity="0.9" />
                     </svg>
 
                     {/* Left nodes: Inputs */}
@@ -199,10 +199,9 @@ export default function IntelligenceLayer() {
                     {/* Connecting Line Down */}
                     <div className="w-px h-10 bg-gradient-to-b from-white/20 to-[#28A0F0] my-2 relative z-0 animate-pulse" />
 
-                    {/* The Brain */}
+                    {/* The Brain (mobile — simplified, no expensive animations) */}
                     <div className="w-32 h-32 rounded-full border border-[#28A0F0]/30 bg-[#0A0A0B] flex items-center justify-center relative shadow-[0_0_30px_rgba(40,160,240,0.2)] z-10">
-                        <div className="absolute inset-0 rounded-full border border-[#28A0F0] animate-[ping_3s_ease-in-out_infinite]" />
-                        <div className="absolute inset-0 rounded-full border border-[#28A0F0]/50 animate-[spin_10s_linear_infinite]" style={{ borderTopColor: 'transparent', borderBottomColor: 'transparent' }} />
+                        <div className="absolute inset-0 rounded-full border border-[#28A0F0]/40" />
                         <div className="absolute w-20 h-20 bg-[#28A0F0] blur-[20px] opacity-20" />
                         <div className="absolute inset-0 flex flex-col items-center justify-center z-10 text-center">
                             <div className="font-code text-[8px] text-[#28A0F0] uppercase tracking-widest font-bold mb-0.5">Brain</div>

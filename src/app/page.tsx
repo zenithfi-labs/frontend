@@ -1,12 +1,15 @@
+import dynamic from "next/dynamic";
 import Navbar from "@/components/sections/Navbar";
 import Hero from "@/components/sections/Hero";
 import StatsBar from "@/components/sections/StatsBar";
-import HowItWorks from "@/components/sections/HowItWorks";
-import IntelligenceLayer from "@/components/sections/IntelligenceLayer";
-import Features from "@/components/sections/Features";
-import Ecosystem from "@/components/sections/Ecosystem";
-import CtaBand from "@/components/sections/CtaBand";
-import Footer from "@/components/sections/Footer";
+
+// Lazy load below-the-fold sections — reduces initial JS bundle significantly
+const HowItWorks = dynamic(() => import("@/components/sections/HowItWorks"));
+const IntelligenceLayer = dynamic(() => import("@/components/sections/IntelligenceLayer"));
+const Features = dynamic(() => import("@/components/sections/Features"));
+const Ecosystem = dynamic(() => import("@/components/sections/Ecosystem"));
+const CtaBand = dynamic(() => import("@/components/sections/CtaBand"));
+const Footer = dynamic(() => import("@/components/sections/Footer"));
 
 export default function Home() {
   return (

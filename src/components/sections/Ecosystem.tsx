@@ -24,9 +24,9 @@ export default function Ecosystem() {
         { name: "BlackRock BUIDL", logo: blackrockLogo, desc: "Institutional Fund" },
     ];
 
-    const row1 = [...supportedAssets, ...supportedAssets, ...supportedAssets, ...supportedAssets, ...supportedAssets];
-    const row2Base = [...yieldSources];
-    const row2 = [...row2Base, ...row2Base, ...row2Base, ...row2Base];
+    // 3x repeat is enough for seamless infinite scroll (duplicate in render covers the gap)
+    const row1 = [...supportedAssets, ...supportedAssets, ...supportedAssets];
+    const row2 = [...yieldSources, ...yieldSources, ...yieldSources];
 
     return (
         <section className="relative py-32 overflow-hidden">
@@ -77,7 +77,7 @@ export default function Ecosystem() {
                                 key={`t1-${i}`}
                                 className="mx-3 flex-shrink-0 group flex items-center gap-4 pr-8 pl-4 py-3 rounded-full border border-white/10 bg-white/[0.03] backdrop-blur-md cursor-default hover:bg-white/10 hover:border-white/30 transition-all duration-300 shadow-[0_0_15px_rgba(255,255,255,0.02)]"
                             >
-                                <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center p-1 transition-transform duration-300 group-hover:scale-110 shadow-xl overflow-hidden drop-shadow-[0_0_8px_rgba(255,255,255,0.2)]">
+                                <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center p-1 transition-transform duration-300 group-hover:scale-110 shadow-xl overflow-hidden">
                                     <Image src={partner.logo} alt={partner.name} width={32} height={32} className="w-full h-full object-cover rounded-full scale-[1.10]" />
                                 </div>
                                 <div className="text-left">

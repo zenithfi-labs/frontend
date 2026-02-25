@@ -2,7 +2,8 @@
 
 import { useRef, useEffect } from "react";
 
-const PARTICLE_COUNT = 40;
+const PARTICLE_COUNT_DESKTOP = 40;
+const PARTICLE_COUNT_MOBILE = 18;
 
 interface Particle {
     x: number;
@@ -15,7 +16,7 @@ interface Particle {
 
 /**
  * Canvas-based floating particle overlay for the Hero section.
- * Renders subtle white dots that drift upward for added depth.
+ * Pauses when offscreen to save CPU/GPU. Reduced particles on mobile.
  */
 export default function Particles() {
     const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -27,17 +28,20 @@ export default function Particles() {
         if (!ctx) return;
 
         let animationId: number;
+        let isVisible = true;
         const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        const isMobile = window.matchMedia("(max-width: 768px)").matches;
+        const count = isMobile ? PARTICLE_COUNT_MOBILE : PARTICLE_COUNT_DESKTOP;
 
         const resize = () => {
             canvas.width = canvas.offsetWidth * dpr;
             canvas.height = canvas.offsetHeight * dpr;
-            ctx.scale(dpr, dpr);
+            ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
         };
         resize();
         window.addEventListener("resize", resize);
 
-        const particles: Particle[] = Array.from({ length: PARTICLE_COUNT }, () => ({
+        const particles: Particle[] = Array.from({ length: count }, () => ({
             x: Math.random() * canvas.offsetWidth,
             y: Math.random() * canvas.offsetHeight,
             r: Math.random() * 1.5 + 0.5,
@@ -47,6 +51,8 @@ export default function Particles() {
         }));
 
         const animate = () => {
+            if (!isVisible) return;
+
             const w = canvas.offsetWidth;
             const h = canvas.offsetHeight;
             ctx.clearRect(0, 0, w, h);
@@ -68,10 +74,26 @@ export default function Particles() {
 
             animationId = requestAnimationFrame(animate);
         };
+
+        // Pause animation when canvas is not visible
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                isVisible = entry.isIntersecting;
+                if (isVisible) {
+                    animationId = requestAnimationFrame(animate);
+                } else {
+                    cancelAnimationFrame(animationId);
+                }
+            },
+            { threshold: 0 }
+        );
+        observer.observe(canvas);
+
         animate();
 
         return () => {
             cancelAnimationFrame(animationId);
+            observer.disconnect();
             window.removeEventListener("resize", resize);
         };
     }, []);

@@ -5,7 +5,7 @@ import { fadeUp, stagger } from "@/lib/animations";
 import { IconBolt, IconLock } from "@/components/icons";
 import Sparkline from "@/components/ui/Sparkline";
 import AnimatedBar from "@/components/ui/AnimatedBar";
-import { useRef, useState } from "react";
+import { useRef, useCallback } from "react";
 import Image from "next/image";
 import usdcLogo from "@/app/brands/usdc.svg";
 import ondoLogo from "@/app/brands/ondo.svg";
@@ -13,34 +13,41 @@ import mountainLogo from "@/app/brands/mountain-protocol.svg";
 import blackrockLogo from "@/app/brands/blackrock.svg";
 import paxgLogo from "@/app/brands/paxg.svg";
 
-// Futuristic Spotlight Card Wrapper
+// Futuristic Spotlight Card — zero re-renders via direct DOM manipulation
 function FeatureCard({ children, className = "" }: { children: React.ReactNode, className?: string }) {
     const divRef = useRef<HTMLDivElement>(null);
-    const [position, setPosition] = useState({ x: 0, y: 0 });
-    const [opacity, setOpacity] = useState(0);
+    const glowRef = useRef<HTMLDivElement>(null);
 
-    const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-        if (!divRef.current) return;
+    const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+        if (!divRef.current || !glowRef.current) return;
         const rect = divRef.current.getBoundingClientRect();
-        setPosition({ x: e.clientX - rect.left, y: e.clientY - rect.top });
-    };
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        glowRef.current.style.background = `radial-gradient(800px circle at ${x}px ${y}px, rgba(40,160,240,0.08), transparent 40%)`;
+    }, []);
+
+    const handleMouseEnter = useCallback(() => {
+        if (glowRef.current) glowRef.current.style.opacity = "1";
+    }, []);
+
+    const handleMouseLeave = useCallback(() => {
+        if (glowRef.current) glowRef.current.style.opacity = "0";
+    }, []);
 
     return (
         <motion.div variants={fadeUp} className={`flex flex-col h-full ${className}`}>
             <div
                 ref={divRef}
                 onMouseMove={handleMouseMove}
-                onMouseEnter={() => setOpacity(1)}
-                onMouseLeave={() => setOpacity(0)}
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
                 className="group relative h-full rounded-[24px] border border-white/[0.08] bg-white/[0.01] backdrop-blur-md overflow-hidden transition-colors duration-500 hover:border-white/[0.15] hover:bg-white/[0.03]"
             >
-                {/* Mouse Spotlight Glow */}
+                {/* Mouse Spotlight Glow — updated via ref, no state */}
                 <div
+                    ref={glowRef}
                     className="pointer-events-none absolute -inset-px z-0 transition-opacity duration-300"
-                    style={{
-                        opacity,
-                        background: `radial-gradient(800px circle at ${position.x}px ${position.y}px, rgba(40,160,240,0.08), transparent 40%)`,
-                    }}
+                    style={{ opacity: 0 }}
                 />
                 {/* Top edge inner highlight for glass effect */}
                 <div className="pointer-events-none absolute inset-0 z-0 bg-gradient-to-b from-white/[0.05] to-transparent opacity-50" />
