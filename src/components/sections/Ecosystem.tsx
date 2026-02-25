@@ -2,8 +2,8 @@
 
 import { motion } from "framer-motion";
 import Image from "next/image";
-import arbitrumLogo from "@/app/brands/arbitrum-logo.svg";
-import chainlinkLogo from "@/app/brands/chainlink-logo.svg";
+import arbitrumLogo from "@/app/brands/arbitrum.svg";
+import chainlinkLogo from "@/app/brands/chainlink.svg";
 import mountainLogo from "@/app/brands/mountain-protocol.svg";
 import ondoLogo from "@/app/brands/ondo.svg";
 import usdcLogo from "@/app/brands/usdc.svg";
@@ -70,8 +70,8 @@ export default function Ecosystem() {
                             key={`t1-${i}`}
                             className="mx-3 flex-shrink-0 group flex items-center gap-4 pr-8 pl-4 py-3 rounded-full border border-white/10 bg-white/[0.03] backdrop-blur-md cursor-default hover:bg-white/10 hover:border-white/30 transition-all duration-300 shadow-[0_0_15px_rgba(255,255,255,0.02)]"
                         >
-                            <div className="w-10 h-10 flex items-center justify-center transition-transform duration-300 group-hover:scale-110 drop-shadow-[0_0_8px_rgba(255,255,255,0.2)]">
-                                <Image src={partner.logo} alt={partner.name} width={40} height={40} className="w-full h-full object-contain" />
+                            <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center p-1 transition-transform duration-300 group-hover:scale-110 shadow-xl overflow-hidden drop-shadow-[0_0_8px_rgba(255,255,255,0.2)]">
+                                <Image src={partner.logo} alt={partner.name} width={32} height={32} className="w-full h-full object-cover rounded-full scale-[1.10]" />
                             </div>
                             <div className="text-left">
                                 <div className="text-[15px] font-bold text-white leading-none tracking-wide">{partner.name}</div>
