@@ -126,7 +126,7 @@ export default function Features() {
                                 </h3>
                                 <p className="font-body text-[15px] text-white/50 max-w-md leading-relaxed">
                                     Smart contracts compiled to WASM via Rust — executing yield strategies
-                                    at native speed with 94% gas savings on Arbitrum.
+                                    at native speed with 94% gas savings on Arbitrum. Sub-millisecond latency enables hyper-efficient rebalancing that is cost-prohibitive on standard EVM.
                                 </p>
                             </div>
 
@@ -193,9 +193,17 @@ export default function Features() {
                         <div className="p-8 pb-0 flex flex-col md:flex-row md:items-start justify-between mb-4">
                             <div className="mb-4 md:mb-0">
                                 <h3 className="font-body text-xl font-bold text-white mb-2">Live Analytics</h3>
-                                <p className="font-body text-[15px] text-white/50 max-w-sm">
+                                <p className="font-body text-[15px] text-white/50 max-w-sm mb-4">
                                     Real-time P&L tracking backed by Chainlink verifiable oracle feeds.
                                 </p>
+                                <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-md bg-[#375BD2]/10 border border-[#375BD2]/20">
+                                    <div className="w-3 h-3 text-[#375BD2]">
+                                        <svg viewBox="0 0 24 24" fill="currentColor">
+                                            <path d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm-1.88-5.744L16.48 9.9c.28-.278.28-.73 0-1.008l-.713-.706c-.28-.278-.734-.278-1.014 0l-5.632 5.584-2.583-2.56c-.28-.278-.734-.278-1.013 0l-.713.706c-.28.278-.28.73 0 1.008l3.805 3.77c.28.278.734.278 1.013 0z" />
+                                        </svg>
+                                    </div>
+                                    <span className="font-code text-[9px] text-[#375BD2] uppercase font-bold tracking-widest">Powered by Chainlink</span>
+                                </div>
                             </div>
                             <div className="text-left md:text-right bg-white/[0.03] border border-white/10 px-4 py-2 rounded-xl">
                                 <div className="font-code text-lg text-[#28A0F0] font-bold">+12.84%</div>

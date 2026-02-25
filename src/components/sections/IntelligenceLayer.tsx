@@ -6,6 +6,7 @@ import Image from "next/image";
 import mountainLogo from "@/app/brands/mountain-protocol.svg";
 import blackrockLogo from "@/app/brands/blackrock.svg";
 import ondoLogo from "@/app/brands/ondo.svg";
+import paxgLogo from "@/app/brands/paxg.svg";
 import usdcLogo from "@/app/brands/usdc.svg";
 import usdtLogo from "@/app/brands/usdt.svg";
 
@@ -66,6 +67,8 @@ export default function IntelligenceLayer() {
                         {/* USDC -> Engine */}
                         <path d="M 120 120 C 250 120, 300 200, 448 200" stroke="rgba(255,255,255,0.05)" strokeWidth="1" fill="none" />
                         {/* USDT -> Engine */}
+                        <path d="M 120 200 C 250 200, 300 200, 448 200" stroke="rgba(255,255,255,0.05)" strokeWidth="1" fill="none" />
+                        {/* PAXG -> Engine */}
                         <path d="M 120 280 C 250 280, 300 200, 448 200" stroke="rgba(255,255,255,0.05)" strokeWidth="1" fill="none" />
                         {/* Engine -> Ondo */}
                         <path d="M 448 200 C 600 200, 650 80, 750 80" stroke="rgba(255,255,255,0.05)" strokeWidth="1" fill="none" />
@@ -76,7 +79,8 @@ export default function IntelligenceLayer() {
 
                         {/* 2. Pulsing Glow Base layer (Breathing gradient track) */}
                         <path d="M 120 120 C 250 120, 300 200, 448 200" stroke="url(#flow-grad)" strokeWidth="1.5" fill="none" className="animate-[flow-pulse_3s_ease-in-out_infinite]" />
-                        <path d="M 120 280 C 250 280, 300 200, 448 200" stroke="url(#flow-grad)" strokeWidth="1.5" fill="none" className="animate-[flow-pulse_3s_ease-in-out_infinite_0.5s]" />
+                        <path d="M 120 200 C 250 200, 300 200, 448 200" stroke="url(#flow-grad)" strokeWidth="1.5" fill="none" className="animate-[flow-pulse_3s_ease-in-out_infinite_0.5s]" />
+                        <path d="M 120 280 C 250 280, 300 200, 448 200" stroke="url(#flow-grad)" strokeWidth="1.5" fill="none" className="animate-[flow-pulse_3s_ease-in-out_infinite_1s]" />
                         <path d="M 448 200 C 600 200, 650 80, 750 80" stroke="url(#flow-grad)" strokeWidth="1.5" fill="none" className="animate-[flow-pulse_3s_ease-in-out_infinite_1s]" />
                         <path d="M 448 200 C 600 200, 650 200, 750 200" stroke="url(#flow-grad)" strokeWidth="1.5" fill="none" className="animate-[flow-pulse_3s_ease-in-out_infinite_1.5s]" />
                         <path d="M 448 200 C 600 200, 650 320, 750 320" stroke="url(#flow-grad)" strokeWidth="1.5" fill="none" className="animate-[flow-pulse_3s_ease-in-out_infinite_2s]" />
@@ -84,7 +88,8 @@ export default function IntelligenceLayer() {
                         {/* 3. Fast Data Packets / Streaks (Solid Color with Dasharray offset) */}
                         {/* Left Side (Input) - Blue Data */}
                         <path d="M 120 120 C 250 120, 300 200, 448 200" stroke="#28A0F0" strokeWidth="3" strokeLinecap="round" fill="none" strokeDasharray="30 1170" className="animate-[flow-fast_3s_linear_infinite]" style={{ filter: 'drop-shadow(0 0 6px #28A0F0)' }} />
-                        <path d="M 120 280 C 250 280, 300 200, 448 200" stroke="#28A0F0" strokeWidth="3" strokeLinecap="round" fill="none" strokeDasharray="30 1170" className="animate-[flow-fast_3.2s_linear_infinite_0.5s]" style={{ filter: 'drop-shadow(0 0 6px #28A0F0)' }} />
+                        <path d="M 120 200 C 250 200, 300 200, 448 200" stroke="#28A0F0" strokeWidth="3" strokeLinecap="round" fill="none" strokeDasharray="30 1170" className="animate-[flow-fast_3.2s_linear_infinite_0.5s]" style={{ filter: 'drop-shadow(0 0 6px #28A0F0)' }} />
+                        <path d="M 120 280 C 250 280, 300 200, 448 200" stroke="#28A0F0" strokeWidth="3" strokeLinecap="round" fill="none" strokeDasharray="30 1170" className="animate-[flow-fast_2.9s_linear_infinite_1s]" style={{ filter: 'drop-shadow(0 0 6px #28A0F0)' }} />
 
                         {/* Right Side (Output) - Gold Yields */}
                         <path d="M 448 200 C 600 200, 650 80, 750 80" stroke="#FFD60A" strokeWidth="3" strokeLinecap="round" fill="none" strokeDasharray="30 1170" className="animate-[flow-fast_2.8s_linear_infinite_1s]" style={{ filter: 'drop-shadow(0 0 6px #FFD60A)' }} />
@@ -92,8 +97,8 @@ export default function IntelligenceLayer() {
                         <path d="M 448 200 C 600 200, 650 320, 750 320" stroke="#FFD60A" strokeWidth="3" strokeLinecap="round" fill="none" strokeDasharray="30 1170" className="animate-[flow-fast_2.9s_linear_infinite_1.5s]" style={{ filter: 'drop-shadow(0 0 6px #FFD60A)' }} />
                     </svg>
 
-                    {/* Left nodes: USDC / USDT */}
-                    <div className="flex flex-col gap-24 relative z-10 w-32">
+                    {/* Left nodes: Inputs */}
+                    <div className="flex flex-col gap-[3.2rem] relative z-10 w-32">
                         <div className="flex items-center gap-3 px-4 py-3 rounded-xl bg-white/[0.03] border border-white/10 backdrop-blur-md shadow-[0_0_15px_rgba(39,117,202,0.2)]">
                             <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center overflow-hidden">
                                 <Image src={usdcLogo} alt="USDC" width={24} height={24} className="w-full h-full object-contain rounded-full" />
@@ -105,6 +110,12 @@ export default function IntelligenceLayer() {
                                 <Image src={usdtLogo} alt="USDT" width={24} height={24} className="w-full h-full object-contain rounded-full" />
                             </div>
                             <div className="font-body text-[13px] font-bold text-white leading-tight">USDT</div>
+                        </div>
+                        <div className="flex items-center gap-3 px-4 py-3 rounded-xl bg-white/[0.03] border border-white/10 backdrop-blur-md shadow-[0_0_15px_rgba(255,214,10,0.2)]">
+                            <div className="w-8 h-8 rounded-full bg-black border border-white/10 flex items-center justify-center overflow-hidden">
+                                <Image src={paxgLogo} alt="PAXG" width={24} height={24} className="w-full h-full object-contain rounded-full scale-110" />
+                            </div>
+                            <div className="font-body text-[13px] font-bold text-white leading-tight">PAXG</div>
                         </div>
                     </div>
 
@@ -155,7 +166,7 @@ export default function IntelligenceLayer() {
                 {/* Mobile Version: Vertical Flow Stack */}
                 <motion.div variants={fadeUp} className="flex flex-col items-center md:hidden mt-12 relative w-full">
                     {/* Input Nodes */}
-                    <div className="flex gap-4 w-full justify-center relative z-10">
+                    <div className="flex flex-wrap gap-3 w-full justify-center relative z-10">
                         <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-white/[0.03] border border-white/10 backdrop-blur-md shadow-[0_0_15px_rgba(39,117,202,0.2)]">
                             <div className="w-6 h-6 rounded-full bg-white/5 flex items-center justify-center overflow-hidden">
                                 <Image src={usdcLogo} alt="USDC" width={18} height={18} className="w-full h-full object-contain rounded-full" />
@@ -167,6 +178,12 @@ export default function IntelligenceLayer() {
                                 <Image src={usdtLogo} alt="USDT" width={18} height={18} className="w-full h-full object-contain rounded-full" />
                             </div>
                             <div className="font-body text-[11px] font-bold text-white">USDT</div>
+                        </div>
+                        <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-white/[0.03] border border-white/10 backdrop-blur-md shadow-[0_0_15px_rgba(255,214,10,0.2)]">
+                            <div className="w-6 h-6 rounded-full bg-black flex items-center justify-center overflow-hidden">
+                                <Image src={paxgLogo} alt="PAXG" width={18} height={18} className="w-full h-full object-contain rounded-full scale-110" />
+                            </div>
+                            <div className="font-body text-[11px] font-bold text-white">PAXG</div>
                         </div>
                     </div>
 

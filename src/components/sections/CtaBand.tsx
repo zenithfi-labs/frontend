@@ -48,8 +48,8 @@ export default function CtaBand() {
                     Join institutional capital already deployed across Zenith vaults.
                     No lock-ups. Full on-chain transparency.
                 </motion.p>
-                <motion.div variants={fadeUp} className="flex justify-center">
-                    <PillButton variant="light">Join Waitlist</PillButton>
+                <motion.div variants={fadeUp} className="flex justify-center mt-6">
+                    <PillButton variant="gold" className="px-8 py-2 scale-110">Join Waitlist</PillButton>
                 </motion.div>
             </motion.div>
         </section>
