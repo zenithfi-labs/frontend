@@ -64,12 +64,6 @@ export default function Footer() {
                             <li><a href="https://github.com/zenithfi-labs" target="_blank" rel="noopener noreferrer" className="font-body text-[14px] text-white/50 hover:text-[#28A0F0] hover:translate-x-1 transition-all inline-block">GitHub Repo</a></li>
                             <li><a href="#" target="_blank" rel="noopener noreferrer" className="font-body text-[14px] text-white/50 hover:text-[#28A0F0] hover:translate-x-1 transition-all inline-block">Security Audits</a></li>
                             <li><a href="#" target="_blank" rel="noopener noreferrer" className="font-body text-[14px] text-white/50 hover:text-[#28A0F0] hover:translate-x-1 transition-all inline-block">Bug Bounty</a></li>
-                            <li>
-                                <div className="inline-flex items-center gap-1.5 px-2 py-1.5 rounded-md bg-[#28A0F0]/5 border border-[#28A0F0]/20 mt-1 cursor-default">
-                                    <IconBolt />
-                                    <span className="font-code text-[9px] text-[#28A0F0] uppercase tracking-widest font-bold">Rust Engine</span>
-                                </div>
-                            </li>
                         </ul>
                     </div>
 
