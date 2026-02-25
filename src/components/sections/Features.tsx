@@ -5,8 +5,13 @@ import { fadeUp, stagger } from "@/lib/animations";
 import { IconBolt, IconLock } from "@/components/icons";
 import Sparkline from "@/components/ui/Sparkline";
 import AnimatedBar from "@/components/ui/AnimatedBar";
-import { TOKEN_BADGES } from "@/data/constants";
 import { useRef, useState } from "react";
+import Image from "next/image";
+import usdcLogo from "@/app/brands/usdc.svg";
+import ondoLogo from "@/app/brands/ondo.svg";
+import mountainLogo from "@/app/brands/mountain-protocol.svg";
+import blackrockLogo from "@/app/brands/blackrock.svg";
+import paxgLogo from "@/app/brands/paxg.svg";
 
 // Futuristic Spotlight Card Wrapper
 function FeatureCard({ children, className = "" }: { children: React.ReactNode, className?: string }) {
@@ -163,13 +168,13 @@ export default function Features() {
                     <FeatureCard>
                         <div className="p-8">
                             <div className="flex items-center mb-6">
-                                {TOKEN_BADGES.map((token, i) => (
+                                {[usdcLogo, ondoLogo, paxgLogo, mountainLogo, blackrockLogo].map((logo, i) => (
                                     <div
                                         key={i}
-                                        className="w-10 h-10 rounded-full flex items-center justify-center text-[11px] font-bold text-white border-[3px] border-[#0A0A0B] shadow-lg"
-                                        style={{ background: token.color, marginLeft: i > 0 ? "-12px" : "0", zIndex: 3 - i }}
+                                        className="w-10 h-10 rounded-full flex items-center justify-center border-[3px] border-[#0A0A0B] shadow-lg overflow-hidden bg-white/5 relative bg-black"
+                                        style={{ marginLeft: i > 0 ? "-12px" : "0", zIndex: 5 - i }}
                                     >
-                                        {token.label}
+                                        <Image src={logo} alt={`Token ${i}`} width={40} height={40} className="w-full h-full object-cover scale-110" />
                                     </div>
                                 ))}
                             </div>
