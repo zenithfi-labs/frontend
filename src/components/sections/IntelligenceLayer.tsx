@@ -151,6 +151,73 @@ export default function IntelligenceLayer() {
                         </div>
                     </div>
                 </motion.div>
+
+                {/* Mobile Version: Vertical Flow Stack */}
+                <motion.div variants={fadeUp} className="flex flex-col items-center md:hidden mt-12 relative w-full">
+                    {/* Input Nodes */}
+                    <div className="flex gap-4 w-full justify-center relative z-10">
+                        <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-white/[0.03] border border-white/10 backdrop-blur-md shadow-[0_0_15px_rgba(39,117,202,0.2)]">
+                            <div className="w-6 h-6 rounded-full bg-white/5 flex items-center justify-center overflow-hidden">
+                                <Image src={usdcLogo} alt="USDC" width={18} height={18} className="w-full h-full object-contain rounded-full" />
+                            </div>
+                            <div className="font-body text-[11px] font-bold text-white">USDC</div>
+                        </div>
+                        <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-white/[0.03] border border-white/10 backdrop-blur-md shadow-[0_0_15px_rgba(38,161,123,0.2)]">
+                            <div className="w-6 h-6 rounded-full bg-white/5 flex items-center justify-center overflow-hidden">
+                                <Image src={usdtLogo} alt="USDT" width={18} height={18} className="w-full h-full object-contain rounded-full" />
+                            </div>
+                            <div className="font-body text-[11px] font-bold text-white">USDT</div>
+                        </div>
+                    </div>
+
+                    {/* Connecting Line Down */}
+                    <div className="w-px h-10 bg-gradient-to-b from-white/20 to-[#28A0F0] my-2 relative z-0 animate-pulse" />
+
+                    {/* The Brain */}
+                    <div className="w-32 h-32 rounded-full border border-[#28A0F0]/30 bg-[#0A0A0B] flex items-center justify-center relative shadow-[0_0_30px_rgba(40,160,240,0.2)] z-10">
+                        <div className="absolute inset-0 rounded-full border border-[#28A0F0] animate-[ping_3s_ease-in-out_infinite]" />
+                        <div className="absolute inset-0 rounded-full border border-[#28A0F0]/50 animate-[spin_10s_linear_infinite]" style={{ borderTopColor: 'transparent', borderBottomColor: 'transparent' }} />
+                        <div className="absolute w-20 h-20 bg-[#28A0F0] blur-[20px] opacity-20" />
+                        <div className="absolute inset-0 flex flex-col items-center justify-center z-10 text-center">
+                            <div className="font-code text-[8px] text-[#28A0F0] uppercase tracking-widest font-bold mb-0.5">Brain</div>
+                            <div className="font-body text-sm text-white font-bold leading-tight">Rust<br />Engine</div>
+                        </div>
+                    </div>
+
+                    {/* Connecting Line Down */}
+                    <div className="w-px h-10 bg-gradient-to-b from-[#28A0F0] to-[#FFD60A] my-2 relative z-0 animate-pulse" />
+
+                    {/* Output Nodes */}
+                    <div className="flex flex-col gap-3 w-full items-center relative z-10">
+                        <div className="flex items-center justify-between px-3 py-2 rounded-xl bg-white/[0.03] border border-white/10 backdrop-blur-md w-[220px]">
+                            <div className="flex items-center gap-3">
+                                <div className="w-6 h-6 rounded-full flex items-center justify-center shadow-lg overflow-hidden bg-white/5">
+                                    <Image src={ondoLogo} alt="Ondo" width={24} height={24} className="w-full h-full object-cover rounded-full scale-105" />
+                                </div>
+                                <div className="font-body text-[11px] font-bold text-white leading-tight">Ondo Finance</div>
+                            </div>
+                            <div className="font-code text-[8px] text-[#FFD60A] tracking-wider">T-BILLS</div>
+                        </div>
+                        <div className="flex items-center justify-between px-3 py-2 rounded-xl bg-white/[0.03] border border-white/10 backdrop-blur-md w-[220px]">
+                            <div className="flex items-center gap-3">
+                                <div className="w-6 h-6 rounded-full flex items-center justify-center shadow-lg overflow-hidden bg-white/5">
+                                    <Image src={mountainLogo} alt="Mountain" width={24} height={24} className="w-full h-full object-cover rounded-full scale-105" />
+                                </div>
+                                <div className="font-body text-[11px] font-bold text-white leading-tight">Mountain Prot.</div>
+                            </div>
+                            <div className="font-code text-[8px] text-[#FFD60A] tracking-wider">TREASURE</div>
+                        </div>
+                        <div className="flex items-center justify-between px-3 py-2 rounded-xl bg-white/[0.03] border border-white/10 backdrop-blur-md w-[220px]">
+                            <div className="flex items-center gap-3">
+                                <div className="w-6 h-6 rounded-full bg-[#111] border border-white/10 flex items-center justify-center shadow-lg text-white font-bold text-[10px] overflow-hidden">
+                                    <Image src={blackrockLogo} alt="Blackrock" width={24} height={24} className="w-full h-full object-cover rounded-full scale-105" />
+                                </div>
+                                <div className="font-body text-[11px] font-bold text-white leading-tight">BlackRock BUIDL</div>
+                            </div>
+                            <div className="font-code text-[8px] text-[#FFD60A] tracking-wider">INSTITUTIONAL</div>
+                        </div>
+                    </div>
+                </motion.div>
             </div>
         </section>
     );
