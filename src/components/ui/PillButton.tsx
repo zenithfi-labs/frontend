@@ -39,7 +39,7 @@ export default function PillButton({
     return (
         <button
             onClick={onClick}
-            className={`relative rounded-full cursor-pointer hover:opacity-90 transition-opacity ${className} ${isGold ? "shadow-[0_0_20px_rgba(255,214,10,0.2)]" : ""}`}
+            className={`group relative rounded-full cursor-pointer hover:opacity-90 transition-opacity ${className} ${isGold ? "shadow-[0_0_20px_rgba(255,214,10,0.2)]" : ""}`}
             style={{ border: getBorderColor(), padding: "1px" }}
         >
             {/* Top-edge glow streak */}
@@ -50,7 +50,7 @@ export default function PillButton({
             />
             {/* Inner pill */}
             <span
-                className={`relative block rounded-full font-body ${isGold ? "font-bold" : "font-medium"} text-sm leading-none`}
+                className={`relative block rounded-full font-body ${isGold ? "font-bold" : "font-medium"} text-sm leading-none group-active:scale-95 transition-transform duration-200`}
                 style={{
                     background: getBgColor(),
                     color: getTextColor(),
