@@ -275,10 +275,6 @@ body::after {
   animation: infinite-scroll 30s linear infinite;
 }
 
-.animate-infinite-scroll:hover {
-  animation-play-state: paused;
-}
-
 @keyframes flow {
   to {
     stroke-dashoffset: -30;
