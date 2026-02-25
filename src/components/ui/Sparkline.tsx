@@ -16,19 +16,27 @@ export default function Sparkline() {
     useEffect(() => {
         if (!inView) return;
 
-        const animatePath = (path: SVGPathElement | null, duration: number) => {
-            if (!path) return;
-            const length = path.getTotalLength();
-            path.style.strokeDasharray = `${length}`;
-            path.style.strokeDashoffset = `${length}`;
-            path.style.transition = `stroke-dashoffset ${duration}s cubic-bezier(0.25, 1, 0.5, 1)`;
+        // Draw-on animation for Zenith curve only
+        const zenith = zenithPathRef.current;
+        if (zenith) {
+            const length = zenith.getTotalLength();
+            zenith.style.strokeDasharray = `${length}`;
+            zenith.style.strokeDashoffset = `${length}`;
+            zenith.style.transition = `stroke-dashoffset 2.5s cubic-bezier(0.25, 1, 0.5, 1)`;
             requestAnimationFrame(() => {
-                path.style.strokeDashoffset = "0";
+                zenith.style.strokeDashoffset = "0";
             });
-        };
+        }
 
-        animatePath(zenithPathRef.current, 2.5);
-        animatePath(usdcPathRef.current, 1.5);
+        // USDC baseline: fade in only (don't touch strokeDasharray — it has its own "4 4" dashes)
+        const usdc = usdcPathRef.current;
+        if (usdc) {
+            usdc.style.opacity = "0";
+            usdc.style.transition = "opacity 1.2s ease-out 0.3s";
+            requestAnimationFrame(() => {
+                usdc.style.opacity = "1";
+            });
+        }
     }, [inView]);
 
     const zenithCurve = "M 0 50 C 50 50, 100 45, 150 25 C 180 15, 230 5, 280 5";
@@ -47,7 +55,7 @@ export default function Sparkline() {
                         <stop offset="100%" stopColor="#FFD60A" />
                     </linearGradient>
                     <filter id="glowLine">
-                        <feGaussianBlur stdDeviation="3" result="coloredBlur" />
+                        <feGaussianBlur stdDeviation="2" result="coloredBlur" />
                         <feMerge>
                             <feMergeNode in="coloredBlur" />
                             <feMergeNode in="SourceGraphic" />
@@ -55,7 +63,7 @@ export default function Sparkline() {
                     </filter>
                 </defs>
 
-                {/* USDC baseline */}
+                {/* USDC baseline — dashed, fades in */}
                 <path
                     d={usdcCurve}
                     fill="none"
@@ -63,9 +71,10 @@ export default function Sparkline() {
                     strokeWidth="1.5"
                     strokeDasharray="4 4"
                     ref={usdcPathRef}
+                    style={{ opacity: 0 }}
                 />
 
-                {/* Zenith Yield curve */}
+                {/* Zenith Yield curve — draws on */}
                 <path
                     d={zenithCurve}
                     fill="none"
@@ -83,21 +92,22 @@ export default function Sparkline() {
                     opacity={inView ? 1 : 0}
                     style={{ transition: "opacity 1.5s ease-out 1s" }}
                 />
-
-                {/* Rebalance Marker Node */}
-                <circle
-                    cx="150"
-                    cy="25"
-                    r="4"
-                    fill="#FFD60A"
-                    className={`transition-all duration-500 delay-[1200ms] ${inView ? 'opacity-100 scale-100' : 'opacity-0 scale-0'}`}
-                    style={{ filter: 'drop-shadow(0 0 8px rgba(255,214,10,0.8))' }}
-                />
             </svg>
+
+            {/* Rebalance Marker — HTML div so it stays round (SVG has preserveAspectRatio="none" which deforms circles) */}
+            <div
+                className={`absolute w-2.5 h-2.5 rounded-full bg-[#FFD60A] transition-opacity duration-500 delay-[1200ms] ${inView ? 'opacity-100' : 'opacity-0'}`}
+                style={{
+                    left: `${(150 / 280) * 100}%`,
+                    top: `${(25 / 60) * 100}%`,
+                    transform: "translate(-50%, -50%)",
+                    boxShadow: "0 0 6px rgba(255,214,10,0.6)",
+                }}
+            />
 
             {/* Labels overlay */}
             <div className={`absolute -top-7 right-0 transform transition-all duration-1000 delay-1000 ${inView ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}`} >
-                <div className="flex items-center justify-end gap-1.5 bg-[#FFD60A]/10 border border-[#FFD60A]/20 px-2 py-0.5 rounded-full backdrop-blur-sm -mb-0.5 w-fit ml-auto">
+                <div className="flex items-center justify-end gap-1.5 bg-[#FFD60A]/10 border border-[#FFD60A]/20 px-2 py-0.5 rounded-full -mb-0.5 w-fit ml-auto">
                     <div className="w-1 h-1 rounded-full bg-[#FFD60A] animate-pulse" />
                     <span className="text-[8px] uppercase tracking-widest text-[#FFD60A] font-bold">Auto-Rebalance</span>
                 </div>
