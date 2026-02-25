@@ -83,8 +83,23 @@ export default function Hero() {
                 </motion.p>
 
                 {/* CTA */}
-                <motion.div variants={fadeUp}>
-                    <PillButton variant="light">Join Waitlist</PillButton>
+                <motion.div variants={fadeUp} className="flex flex-col items-center gap-2">
+                    <PillButton variant="gold">Join Waitlist</PillButton>
+                    <div className="font-body text-[12px] text-white/50 tracking-wide mt-2">
+                        Limited access for early institutional partners.
+                    </div>
+                </motion.div>
+
+                {/* Proof of Security Badge */}
+                <motion.div variants={fadeUp} className="mt-8 flex flex-col md:flex-row items-center gap-3 px-4 py-2.5 rounded-2xl bg-white/[0.03] border border-white/10 backdrop-blur-md">
+                    <div className="w-6 h-6 rounded-full bg-[#2A5ADA]/20 flex items-center justify-center border border-[#2A5ADA]/40">
+                        <svg className="w-3 h-3 text-[#2A5ADA]" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2L3 6v6.5c0 5.05 3.81 9.85 9 11.5 5.19-1.65 9-6.45 9-11.5V6l-9-4zm0 18.9c-3.8-1.54-6.5-5.32-6.5-9.4V7.54l6.5-2.89 6.5 2.89v6.96c0 4.08-2.7 7.86-6.5 9.4zM12 11c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z" />
+                        </svg>
+                    </div>
+                    <span className="font-body text-xs text-white/70">
+                        <strong className="text-white font-medium">Non-Custodial Architecture.</strong> Real-time Proof of Reserves via Chainlink.
+                    </span>
                 </motion.div>
             </motion.div>
 

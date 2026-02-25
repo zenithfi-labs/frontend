@@ -1,5 +1,9 @@
 // ── Footer ─────────────────────────────────────────────
-export const FOOTER_LINKS = ["Docs", "GitHub", "Twitter / X"] as const;
+export const FOOTER_LINKS = [
+    { label: "Docs", href: "#" },
+    { label: "GitHub", href: "https://github.com/zenithfi-labs" },
+    { label: "Twitter / X", href: "#" },
+] as const;
 
 // ── Hero ───────────────────────────────────────────────
 export const HERO_VIDEO_URL =
