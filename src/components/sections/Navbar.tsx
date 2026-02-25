@@ -2,6 +2,7 @@
 
 import { useRef, useEffect, useState } from "react";
 import PillButton from "@/components/ui/PillButton";
+import Link from "next/link";
 
 export default function Navbar() {
     const [scrolled, setScrolled] = useState(false);
@@ -36,7 +37,9 @@ export default function Navbar() {
                 </span>
 
                 {/* CTA */}
-                <PillButton variant="dark">Join Waitlist</PillButton>
+                <Link href="/waitlist">
+                    <PillButton variant="dark">Join Waitlist</PillButton>
+                </Link>
             </nav>
         </>
     );

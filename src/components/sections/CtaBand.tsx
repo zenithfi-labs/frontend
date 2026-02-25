@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { fadeUp, stagger } from "@/lib/animations";
 import PillButton from "@/components/ui/PillButton";
+import Link from "next/link";
 
 export default function CtaBand() {
     return (
@@ -49,7 +50,9 @@ export default function CtaBand() {
                     No lock-ups. Full on-chain transparency.
                 </motion.p>
                 <motion.div variants={fadeUp} className="flex justify-center mt-6">
-                    <PillButton variant="gold" className="px-8 py-2 scale-110">Join Waitlist</PillButton>
+                    <Link href="/waitlist">
+                        <PillButton variant="gold" className="px-8 py-2 scale-110">Join Waitlist</PillButton>
+                    </Link>
                 </motion.div>
             </motion.div>
         </section>

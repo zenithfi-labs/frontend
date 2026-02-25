@@ -4,6 +4,7 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { fadeUp, stagger } from "@/lib/animations";
 import PillButton from "@/components/ui/PillButton";
 import Particles from "@/components/ui/Particles";
+import Link from "next/link";
 
 export default function Hero() {
     const { scrollY } = useScroll();
@@ -90,7 +91,9 @@ export default function Hero() {
 
                 {/* CTA */}
                 <motion.div variants={fadeUp} className="flex flex-col items-center gap-2">
-                    <PillButton variant="gold">Join Waitlist</PillButton>
+                    <Link href="/waitlist">
+                        <PillButton variant="gold">Join Waitlist</PillButton>
+                    </Link>
                     <div className="font-body text-[12px] text-white/50 tracking-wide mt-2">
                         Limited access for early institutional partners.
                     </div>
