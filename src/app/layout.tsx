@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Syne, Plus_Jakarta_Sans, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
-import { Toaster } from "sonner";
+import SonnerToaster from "@/components/ui/SonnerToaster";
 
 const syne = Syne({
   variable: "--font-syne",
@@ -33,12 +33,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`${syne.variable} ${plusJakartaSans.variable} ${jetbrainsMono.variable} antialiased`}
       >
         {children}
-        <Toaster position="bottom-right" theme="dark" closeButton />
+        <SonnerToaster />
       </body>
     </html>
   );
