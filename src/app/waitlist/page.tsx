@@ -7,6 +7,7 @@ import Link from "next/link";
 import { fadeUp, stagger } from "@/lib/animations";
 import Image from "next/image";
 import arbitrumLogo from "@/app/brands/arbitrum-logo.svg";
+import { toast } from "sonner";
 
 export default function WaitlistPage() {
     const [email, setEmail] = useState("");
@@ -37,8 +38,12 @@ export default function WaitlistPage() {
 
             setIsSubmitted(true);
             setEmail("");
+            toast.success("You're on the list!", {
+                description: "We'll reach out when we're ready for you."
+            });
         } catch (err: any) {
             setErrorMsg(err.message);
+            toast.error(err.message);
         } finally {
             setIsLoading(false);
         }

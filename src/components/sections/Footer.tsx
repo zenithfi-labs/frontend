@@ -3,6 +3,7 @@
 import { IconBolt } from "@/components/icons";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { toast } from "sonner";
 
 function NewsletterForm() {
     const [email, setEmail] = useState("");
@@ -30,22 +31,22 @@ function NewsletterForm() {
             }
 
             setStatus("success");
-            setMsg("Thanks for subscribing.");
+            toast.success("Subscribed to updates", {
+                description: "You are now on our mailing list. Watch out for our emails.",
+            });
             setEmail("");
 
             // Revert back to idle after 3s
             setTimeout(() => {
                 setStatus("idle");
-                setMsg("");
             }, 3000);
 
         } catch (err: any) {
             setStatus("error");
-            setMsg(err.message);
+            toast.error(err.message || "Failed to subscribe");
 
             setTimeout(() => {
                 setStatus("idle");
-                setMsg("");
             }, 3000);
         }
     };
@@ -69,20 +70,6 @@ function NewsletterForm() {
                 {status === "loading" ? "..." : "Subscribe"}
             </button>
 
-            <AnimatePresence>
-                {msg && (
-                    <motion.div
-                        initial={{ opacity: 0, y: -5 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0 }}
-                        className="absolute -bottom-6 left-2"
-                    >
-                        <span className={`font-body text-[11px] ${status === "error" ? "text-red-400" : "text-[#28A0F0]"}`}>
-                            {msg}
-                        </span>
-                    </motion.div>
-                )}
-            </AnimatePresence>
         </form>
     );
 }
