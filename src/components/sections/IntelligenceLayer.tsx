@@ -162,7 +162,7 @@ export default function IntelligenceLayer() {
                         </div>
                         <div className="flex items-center gap-3 px-4 py-3 rounded-xl bg-white/[0.03] border border-white/10 backdrop-blur-md shadow-[0_0_15px_rgba(255,214,10,0.1)] hover:border-[#FFD60A]/30 transition-colors">
                             <div className="w-8 h-8 rounded-full bg-[#111] border border-white/10 flex items-center justify-center shadow-lg text-white font-bold text-[10px] overflow-hidden">
-                                <Image src={blackrockLogo} alt="Mountain Protocol" width={1000} height={1000} className="w-full h-full object-cover rounded-full scale-105" />
+                                <Image src={blackrockLogo} alt="BlackRock BUIDL" width={1000} height={1000} className="w-full h-full object-cover rounded-full scale-105" />
                             </div>
                             <div className="flex flex-col">
                                 <div className="font-body text-[13px] font-bold text-white leading-tight">BlackRock BUIDL</div>

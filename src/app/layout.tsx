@@ -21,7 +21,7 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Zenith",
+  title: "Zenith Finance",
   description:
     "Institutional-grade yield optimization on tokenized real-world assets. Automated, transparent, and built for serious capital.",
 };

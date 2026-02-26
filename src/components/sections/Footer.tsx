@@ -114,7 +114,7 @@ export default function Footer() {
                 >
                     <div className="flex items-center gap-2">
                         <span className="font-body text-xs text-white/30">
-                            © {new Date().getFullYear()} Zenith Protocol. All rights reserved.
+                            © {new Date().getFullYear()} Zenith Finance. All rights reserved.
                         </span>
                     </div>
 

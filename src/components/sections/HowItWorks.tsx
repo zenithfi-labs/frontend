@@ -9,7 +9,7 @@ const STEPS = [
         icon: <IconDeposit />,
         num: "01",
         title: "Deposit",
-        desc: "Deposit USDC or USDT. Receive zTokens that accrue yield real-time.",
+        desc: "Deposit USDC or USDT directly into Zenith Vaults. Capital begins accruing yield in real-time.",
     },
     {
         icon: <IconAllocation />,
