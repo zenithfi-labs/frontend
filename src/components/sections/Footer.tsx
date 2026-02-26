@@ -103,7 +103,7 @@ export default function Footer() {
 
                         {/* Social Links */}
                         <div className="flex items-center gap-4">
-                            <a href="#" target="_blank" rel="noopener noreferrer" aria-label="Twitter / X" className="w-10 h-10 rounded-full border border-white/10 bg-white/5 flex items-center justify-center text-white/50 hover:bg-white/10 hover:text-white hover:border-[#28A0F0]/50 transition-all hover:shadow-[0_0_15px_rgba(40,160,240,0.2)]">
+                            <a href="https://x.com/zenithfinance" target="_blank" rel="noopener noreferrer" aria-label="Twitter / X" className="w-10 h-10 rounded-full border border-white/10 bg-white/5 flex items-center justify-center text-white/50 hover:bg-white/10 hover:text-white hover:border-[#28A0F0]/50 transition-all hover:shadow-[0_0_15px_rgba(40,160,240,0.2)]">
                                 <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
                                     <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
                                 </svg>
@@ -120,11 +120,11 @@ export default function Footer() {
                     <div className="lg:col-span-2">
                         <h4 className="font-code text-xs font-semibold tracking-wider text-white uppercase mb-6">Protocol</h4>
                         <ul className="space-y-4">
-                            {["Yield Vaults", "Smart Routing", "Analytics Board", "Transparency", "Risk Framework"].map(item => (
-                                <li key={item}>
-                                    <a href="#" className="font-body text-[14px] text-white/50 hover:text-[#28A0F0] hover:translate-x-1 transition-all inline-block">{item}</a>
-                                </li>
-                            ))}
+                            <li><a href="/waitlist" className="font-body text-[14px] text-white/50 hover:text-[#28A0F0] hover:translate-x-1 transition-all inline-block">Yield Vaults</a></li>
+                            <li><a href="/waitlist" className="font-body text-[14px] text-white/50 hover:text-[#28A0F0] hover:translate-x-1 transition-all inline-block">Smart Routing</a></li>
+                            <li><a href="/waitlist" className="font-body text-[14px] text-white/50 hover:text-[#28A0F0] hover:translate-x-1 transition-all inline-block">Proof of Reserves</a></li>
+                            <li><a href="https://arbiscan.io/" target="_blank" rel="noopener noreferrer" className="font-body text-[14px] text-white/50 hover:text-[#28A0F0] hover:translate-x-1 transition-all inline-block">Transparency</a></li>
+                            <li><a href="/docs/risk-framework" className="font-body text-[14px] text-white/50 hover:text-[#28A0F0] hover:translate-x-1 transition-all inline-block">Risk Framework</a></li>
                         </ul>
                     </div>
 
@@ -132,10 +132,10 @@ export default function Footer() {
                     <div className="lg:col-span-2">
                         <h4 className="font-code text-xs font-semibold tracking-wider text-white uppercase mb-6">Developers</h4>
                         <ul className="space-y-4">
-                            <li><a href="#" target="_blank" rel="noopener noreferrer" className="font-body text-[14px] text-white/50 hover:text-[#28A0F0] hover:translate-x-1 transition-all inline-block">Documentation</a></li>
+                            <li><a href="https://docs.zenithfi.xyz" target="_blank" rel="noopener noreferrer" className="font-body text-[14px] text-white/50 hover:text-[#28A0F0] hover:translate-x-1 transition-all inline-block">Documentation</a></li>
                             <li><a href="https://github.com/zenithfi-labs" target="_blank" rel="noopener noreferrer" className="font-body text-[14px] text-white/50 hover:text-[#28A0F0] hover:translate-x-1 transition-all inline-block">GitHub Repo</a></li>
-                            <li><a href="#" target="_blank" rel="noopener noreferrer" className="font-body text-[14px] text-white/50 hover:text-[#28A0F0] hover:translate-x-1 transition-all inline-block">Security Audits</a></li>
-                            <li><a href="#" target="_blank" rel="noopener noreferrer" className="font-body text-[14px] text-white/50 hover:text-[#28A0F0] hover:translate-x-1 transition-all inline-block">Bug Bounty</a></li>
+                            <li><a href="https://github.com/zenithfi-labs/audits" target="_blank" rel="noopener noreferrer" className="font-body text-[14px] text-white/50 hover:text-[#28A0F0] hover:translate-x-1 transition-all inline-block">Security Audits</a></li>
+                            <li><a href="https://immunefi.com/bounty/" target="_blank" rel="noopener noreferrer" className="font-body text-[14px] text-white/50 hover:text-[#28A0F0] hover:translate-x-1 transition-all inline-block">Bug Bounty</a></li>
                         </ul>
                     </div>
 
