@@ -11,13 +11,36 @@ import arbitrumLogo from "@/app/brands/arbitrum-logo.svg";
 export default function WaitlistPage() {
     const [email, setEmail] = useState("");
     const [isSubmitted, setIsSubmitted] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+    const [errorMsg, setErrorMsg] = useState("");
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (email) {
+        if (!email) return;
+
+        setIsLoading(true);
+        setErrorMsg("");
+
+        try {
+            const API_URL = process.env.NEXT_PUBLIC_API_URL;
+            const res = await fetch(`${API_URL}/api/v1/waitlist`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email }),
+            });
+
+            const data = await res.json();
+
+            if (!res.ok) {
+                throw new Error(data.error || "Failed to join waitlist");
+            }
+
             setIsSubmitted(true);
             setEmail("");
-            // In a real app, you'd send this to your backend/API
+        } catch (err: any) {
+            setErrorMsg(err.message);
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -95,17 +118,23 @@ export default function WaitlistPage() {
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
                                     placeholder="Enter your institutional email"
-                                    className="w-full bg-white/[0.03] border border-white/10 rounded-2xl px-6 py-5 pr-36 font-body text-base text-white placeholder-white/30 focus:outline-none focus:border-[#FFD60A]/50 hover:bg-white/[0.05] transition-all shadow-[0_0_20px_rgba(0,0,0,0.5)] focus:shadow-[0_0_30px_rgba(255,214,10,0.1)]"
+                                    disabled={isLoading}
+                                    className="w-full bg-white/[0.03] border border-white/10 rounded-2xl px-6 py-5 pr-36 font-body text-base text-white placeholder-white/30 focus:outline-none focus:border-[#FFD60A]/50 hover:bg-white/[0.05] transition-all shadow-[0_0_20px_rgba(0,0,0,0.5)] focus:shadow-[0_0_30px_rgba(255,214,10,0.1)] disabled:opacity-50"
                                 />
                                 <div className="absolute right-2.5 top-1/2 -translate-y-1/2">
-                                    <button type="submit" className="group relative rounded-full cursor-pointer hover:opacity-90 transition-opacity shadow-[0_0_20px_rgba(255,214,10,0.2)]" style={{ border: "0.6px solid rgba(255, 214, 10, 0.85)", padding: "1px" }}>
+                                    <button type="submit" disabled={isLoading} className="group relative rounded-full cursor-pointer hover:opacity-90 transition-opacity shadow-[0_0_20px_rgba(255,214,10,0.2)] disabled:opacity-50" style={{ border: "0.6px solid rgba(255, 214, 10, 0.85)", padding: "1px" }}>
                                         <span aria-hidden className="pointer-events-none absolute left-1/2 -translate-x-1/2 top-0 w-1/2 rounded-full blur-md" style={{ height: "6px", background: "rgba(255, 214, 10, 0.8)", marginTop: "-3px" }} />
                                         <span className="relative block rounded-full font-body font-bold text-[13px] leading-none text-black group-active:scale-95 transition-transform duration-200" style={{ background: "#FFD60A", padding: "12px 24px" }}>
-                                            Join Now
+                                            {isLoading ? "Joining..." : "Join Now"}
                                         </span>
                                     </button>
                                 </div>
                             </div>
+                            {errorMsg && (
+                                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="absolute -bottom-8 left-0 right-0 text-center pointer-events-none">
+                                    <span className="font-body text-xs text-red-400">{errorMsg}</span>
+                                </motion.div>
+                            )}
                         </motion.form>
                     )}
 
