@@ -1,6 +1,91 @@
 "use client";
 
 import { IconBolt } from "@/components/icons";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+
+function NewsletterForm() {
+    const [email, setEmail] = useState("");
+    const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+    const [msg, setMsg] = useState("");
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!email) return;
+
+        setStatus("loading");
+
+        try {
+            const API_URL = process.env.NEXT_PUBLIC_API_URL;
+            const res = await fetch(`${API_URL}/api/v1/waitlist`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email }),
+            });
+
+            const data = await res.json();
+
+            if (!res.ok) {
+                throw new Error(data.error || "Failed to subscribe");
+            }
+
+            setStatus("success");
+            setMsg("Thanks for subscribing.");
+            setEmail("");
+
+            // Revert back to idle after 3s
+            setTimeout(() => {
+                setStatus("idle");
+                setMsg("");
+            }, 3000);
+
+        } catch (err: any) {
+            setStatus("error");
+            setMsg(err.message);
+
+            setTimeout(() => {
+                setStatus("idle");
+                setMsg("");
+            }, 3000);
+        }
+    };
+
+    return (
+        <form onSubmit={handleSubmit} className="relative group max-w-sm">
+            <input
+                type="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                disabled={status === "loading" || status === "success"}
+                placeholder="Enter your email"
+                className="w-full bg-white/[0.02] border border-white/10 rounded-xl px-4 py-3.5 pr-28 font-body text-sm text-white placeholder-white/30 focus:outline-none focus:border-[#28A0F0]/50 hover:bg-white/[0.04] transition-all disabled:opacity-50"
+            />
+            <button
+                type="submit"
+                disabled={status === "loading" || status === "success"}
+                className="absolute right-1.5 top-1.5 bottom-1.5 bg-white text-black font-body font-semibold text-xs px-4 rounded-lg hover:bg-white/90 transition-colors shadow-[0_0_15px_rgba(255,255,255,0.1)] active:scale-95 disabled:opacity-50"
+            >
+                {status === "loading" ? "..." : "Subscribe"}
+            </button>
+
+            <AnimatePresence>
+                {msg && (
+                    <motion.div
+                        initial={{ opacity: 0, y: -5 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0 }}
+                        className="absolute -bottom-6 left-2"
+                    >
+                        <span className={`font-body text-[11px] ${status === "error" ? "text-red-400" : "text-[#28A0F0]"}`}>
+                            {msg}
+                        </span>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+        </form>
+    );
+}
 
 export default function Footer() {
     return (
@@ -73,19 +158,7 @@ export default function Footer() {
                         <p className="font-body text-[14px] text-white/40 mb-5 max-w-sm leading-relaxed">
                             Get the latest updates on institutional yield and protocol developments.
                         </p>
-                        <form className="relative group max-w-sm">
-                            <input
-                                type="email"
-                                placeholder="Enter your email"
-                                className="w-full bg-white/[0.02] border border-white/10 rounded-xl px-4 py-3.5 pr-28 font-body text-sm text-white placeholder-white/30 focus:outline-none focus:border-[#28A0F0]/50 hover:bg-white/[0.04] transition-colors"
-                            />
-                            <button
-                                type="button"
-                                className="absolute right-1.5 top-1.5 bottom-1.5 bg-white text-black font-body font-semibold text-xs px-4 rounded-lg hover:bg-white/90 transition-colors shadow-[0_0_15px_rgba(255,255,255,0.1)] active:scale-95"
-                            >
-                                Subscribe
-                            </button>
-                        </form>
+                        <NewsletterForm />
                     </div>
                 </div>
 
